@@ -914,9 +914,9 @@ impl DepositService {
         // that we aggregated locally; the package flow aggregates server-side,
         // so we re-derive the same security guarantees here:
         //  1) the verifying key we used really is the tree's verifying key,
-        //  2) the returned cpfp transactions carry a valid Schnorr signature
-        //     under that key for the sighashes we computed.
-        // `direct_from_cpfp_refund_tx` carries no signature to verify.
+        //  2) each finalized transaction carries a valid Schnorr signature
+        //     under that key for the sighashes we computed,
+        //  3) the deliberately unsigned direct-refund template is unchanged.
         let returned_verifying_key = PublicKey::from_slice(&root_node.verifying_public_key)
             .map_err(|_| ServiceError::InvalidVerifyingKey)?;
         if &returned_verifying_key != verifying_public_key {
@@ -933,6 +933,10 @@ impl DepositService {
             &root_node.refund_tx,
             cpfp_refund_sighash.as_byte_array(),
             verifying_public_key,
+        )?;
+        validate_unsigned_transaction_template(
+            &direct_from_cpfp_refund_tx,
+            &root_node.direct_from_cpfp_refund_tx,
         )?;
 
         Ok(vec![root_node.try_into()?])
@@ -1564,6 +1568,19 @@ impl DepositService {
     }
 }
 
+// The operator keeps this transaction unsigned until the direct-refund path
+// uses it. Check the returned template byte-for-byte instead of requiring a
+// witness that the operator protocol deliberately does not attach.
+fn validate_unsigned_transaction_template(
+    expected: &Transaction,
+    returned: &[u8],
+) -> Result<(), ServiceError> {
+    if serialize(expected) != returned {
+        return Err(ServiceError::InvalidTransaction);
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1911,5 +1928,39 @@ mod tests {
 
             assert_eq!(estimated, tx.vsize() as u64, "address: {address}");
         }
+    }
+}
+
+#[cfg(test)]
+mod unsigned_template_tests {
+    use bitcoin::{Transaction, absolute, transaction};
+
+    use super::validate_unsigned_transaction_template;
+
+    #[test]
+    fn accepts_unchanged_unsigned_transaction_template() {
+        let transaction = Transaction {
+            version: transaction::Version::TWO,
+            lock_time: absolute::LockTime::ZERO,
+            input: Vec::new(),
+            output: Vec::new(),
+        };
+        let encoded = bitcoin::consensus::serialize(&transaction);
+
+        validate_unsigned_transaction_template(&transaction, &encoded).unwrap();
+    }
+
+    #[test]
+    fn rejects_changed_unsigned_transaction_template() {
+        let transaction = Transaction {
+            version: transaction::Version::TWO,
+            lock_time: absolute::LockTime::ZERO,
+            input: Vec::new(),
+            output: Vec::new(),
+        };
+        let mut encoded = bitcoin::consensus::serialize(&transaction);
+        encoded.push(0);
+
+        assert!(validate_unsigned_transaction_template(&transaction, &encoded).is_err());
     }
 }
