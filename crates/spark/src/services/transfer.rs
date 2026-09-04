@@ -7,7 +7,6 @@ use crate::address::SparkAddress;
 use crate::operator::OperatorPool;
 use crate::operator::rpc as operator_rpc;
 use crate::operator::rpc::spark::transfer_filter::Participant;
-use crate::operator::rpc::OperatorRpcError;
 use crate::operator::rpc::spark::{
     AdaptorPublicKeyPackage, HashVariant, InitiateSwapCounterTransferRequest, StartTransferRequest,
     TransferFilter,
@@ -230,7 +229,7 @@ impl TransferService {
     /// referenced primary transfer.
     pub async fn transfer_swap_counter(
         &self,
-        leaves: Vec<TreeNode>,
+        leaves: &[LeafKeyTweak],
         receiver_id: &PublicKey,
         primary_transfer_id: &TransferId,
         adaptor_public_key: &PublicKey,
@@ -242,13 +241,12 @@ impl TransferService {
             ));
         }
 
-        self.notify_before_send_transfer(transfer_id, receiver_id, &leaves, None)
+        self.notify_before_send_transfer(transfer_id, receiver_id, leaves, None)
             .await?;
-        let leaf_key_tweaks = prepare_leaf_key_tweaks_to_send(leaves);
         let mut prepared = self
             .prepare_transfer_request(
                 transfer_id,
-                &leaf_key_tweaks,
+                leaves,
                 receiver_id,
                 None,
                 None,

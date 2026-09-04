@@ -1186,7 +1186,7 @@ impl SparkWallet {
         let transfer = with_reserved_leaves(
             self.tree_service.as_ref(),
             self.transfer_service.transfer_swap_counter(
-                reservation.leaves.clone(),
+                &with_node_id_keys(reservation.leaves.clone()),
                 &receiver_address.identity_public_key,
                 &primary_transfer_id,
                 &adaptor_public_key,

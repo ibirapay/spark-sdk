@@ -8,6 +8,7 @@ use crate::header_provider::{HeaderProvider, HeaderProviderError};
 use crate::operator::rpc::OperatorRpcError;
 use crate::operator::rpc::spark::query_nodes_request::Source;
 use crate::operator::rpc::spark::spark_service_client::SparkServiceClient;
+use crate::operator::rpc::spark_ssp_internal::spark_ssp_internal_service_client::SparkSspInternalServiceClient;
 use crate::operator::rpc::spark_token::BroadcastTransactionRequest;
 use crate::operator::rpc::spark_token::BroadcastTransactionResponse;
 use crate::operator::rpc::spark_token::CommitTransactionRequest;
@@ -73,6 +74,62 @@ impl SparkRpcClient {
             header_provider,
             operator_id,
         }
+    }
+
+    #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
+    pub async fn prepare_tree_address(
+        &self,
+        req: PrepareTreeAddressRequest,
+    ) -> Result<PrepareTreeAddressResponse> {
+        debug!("Calling SSP prepare_tree_address with request: {:?}", req);
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.prepare_tree_address(req).await?) }
+        })
+        .await
+    }
+
+    #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
+    pub async fn create_tree(
+        &self,
+        req: CreateTreeRequest,
+        idempotency_key: String,
+    ) -> Result<CreateTreeResponse> {
+        debug!("Calling SSP create_tree with request: {:?}", req);
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            let idempotency_key = idempotency_key.clone();
+            async move {
+                let mut request = Request::new(req);
+                set_idempotency_key(request.metadata_mut(), Some(idempotency_key))?;
+                Ok(client.create_tree(request).await?)
+            }
+        })
+        .await
+    }
+
+    #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
+    pub async fn finalize_node_signatures_v2(
+        &self,
+        req: FinalizeNodeSignaturesRequest,
+    ) -> Result<FinalizeNodeSignaturesResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.finalize_node_signatures_v2(req).await?) }
+        })
+        .await
+    }
+
+    #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
+    pub async fn get_signing_operator_list(&self) -> Result<GetSigningOperatorListResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_service_client(interceptor);
+            async move { Ok(client.get_signing_operator_list(()).await?) }
+        })
+        .await
     }
 
     #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
@@ -781,6 +838,14 @@ impl SparkRpcClient {
     /// a client for a service this one does not speak.
     pub fn transport(&self) -> &Transport {
         &self.transport
+    }
+
+    fn spark_ssp_internal_service_client(
+        &self,
+        interceptor: HeaderInterceptor,
+    ) -> SparkSspInternalServiceClient<InterceptedService<Transport, HeaderInterceptor>> {
+        SparkSspInternalServiceClient::with_interceptor(self.transport.clone(), interceptor)
+            .max_decoding_message_size(MAX_DECODING_MESSAGE_SIZE)
     }
 
     /// The headers an authenticated call to this operator carries, refreshing the

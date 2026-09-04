@@ -14,6 +14,7 @@ fn main() {
                 "protos/spark/multisig.proto",
                 "protos/spark/spark.proto",
                 "protos/spark/spark_authn.proto",
+                "protos/spark/spark_ssp_internal.proto",
                 "protos/spark/spark_token.proto",
                 "protos/ssp/ssp_authn.proto",
             ],

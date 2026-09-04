@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package spark_ssp_internal;
+
+import "spark/spark.proto";
+
+// Operator APIs intended for an authenticated Spark service provider.
+service SparkSspInternalService {
+    rpc prepare_tree_address(spark.PrepareTreeAddressRequest) returns (spark.PrepareTreeAddressResponse) {}
+    rpc create_tree(spark.CreateTreeRequest) returns (spark.CreateTreeResponse) {}
+}

@@ -175,11 +175,70 @@ pub(crate) fn create_root_node_txs(
 pub(crate) fn create_initial_timelock_node_txs(
     parent_tx: &Transaction,
 ) -> Result<NodeTransactions, ServiceError> {
+    create_initial_timelock_node_txs_at_vout(parent_tx, 0)
+}
+
+pub(crate) fn create_initial_timelock_node_txs_at_vout(
+    parent_tx: &Transaction,
+    vout: u32,
+) -> Result<NodeTransactions, ServiceError> {
     let (cpfp_sequence, direct_sequence) = initial_timelock_sequence();
     info!(
         "create_initial_timelock_node_txs: cpfp sequence: {cpfp_sequence}, direct sequence: {direct_sequence}"
     );
-    create_node_txs(parent_tx, cpfp_sequence, direct_sequence, 0)
+    create_node_txs(parent_tx, cpfp_sequence, direct_sequence, vout)
+}
+
+pub(crate) fn create_split_txs(
+    parent_tx: &Transaction,
+    vout: u32,
+    child_outputs: Vec<TxOut>,
+) -> Result<NodeTransactions, ServiceError> {
+    let parent_output = parent_tx
+        .output
+        .get(vout as usize)
+        .ok_or(ServiceError::InvalidOutputIndex)?;
+    let total = child_outputs
+        .iter()
+        .try_fold(0_u64, |sum, output| sum.checked_add(output.value.to_sat()))
+        .ok_or_else(|| ServiceError::InvalidInput("split output value overflow".to_string()))?;
+    if total != parent_output.value.to_sat() {
+        return Err(ServiceError::InvalidInput(format!(
+            "split children total {total} does not equal parent value {}",
+            parent_output.value.to_sat()
+        )));
+    }
+    let previous_output = OutPoint {
+        txid: parent_tx.compute_txid(),
+        vout,
+    };
+    let mut cpfp_outputs = child_outputs.clone();
+    cpfp_outputs.push(ephemeral_anchor_output());
+    let cpfp_tx = Transaction {
+        version: Version::non_standard(3),
+        lock_time: LockTime::ZERO,
+        input: vec![TxIn {
+            previous_output,
+            ..Default::default()
+        }],
+        output: cpfp_outputs,
+    };
+    let direct_tx = Transaction {
+        version: Version::non_standard(3),
+        lock_time: LockTime::ZERO,
+        input: vec![TxIn {
+            previous_output,
+            ..Default::default()
+        }],
+        output: child_outputs
+            .into_iter()
+            .map(|mut output| {
+                output.value = Amount::from_sat(maybe_apply_fee(output.value.to_sat()));
+                output
+            })
+            .collect(),
+    };
+    Ok(NodeTransactions { cpfp_tx, direct_tx })
 }
 
 pub(crate) fn create_decremented_timelock_node_txs(

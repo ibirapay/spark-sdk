@@ -11,10 +11,48 @@ use std::collections::BTreeMap;
 
 use bitcoin::secp256k1::{PublicKey, SecretKey, ecdsa, schnorr};
 use frost_secp256k1_tr::{Identifier, round1::SigningCommitments, round2::SignatureShare};
+use serde::{Deserialize, Serialize};
 
 use super::SignerError;
 use crate::services::TransferId;
 use crate::tree::{TreeNode, TreeNodeId};
+
+#[derive(Debug, thiserror::Error)]
+pub enum LeafKeyOverrideStoreError {
+    #[error("leaf key override storage error: {0}")]
+    Generic(String),
+}
+
+/// Durable storage for the opaque encrypted keys created by leaf splitting.
+/// Implementations must make each write durable before returning.
+#[macros::async_trait]
+pub trait LeafKeyOverrideStore: Send + Sync + 'static {
+    async fn get_leaf_key(
+        &self,
+        node_id: &TreeNodeId,
+    ) -> Result<Option<Vec<u8>>, LeafKeyOverrideStoreError>;
+
+    async fn get_pending_split_keys(
+        &self,
+        operation_id: &str,
+        parent_node_id: &TreeNodeId,
+    ) -> Result<Option<Vec<Vec<u8>>>, LeafKeyOverrideStoreError>;
+
+    async fn put_pending_split_keys(
+        &self,
+        operation_id: &str,
+        parent_node_id: &TreeNodeId,
+        encrypted_keys: &[Vec<u8>],
+    ) -> Result<(), LeafKeyOverrideStoreError>;
+
+    /// Atomically bind the pending keys, in order, to operator-assigned IDs.
+    /// This operation must be idempotent for the same operation and IDs.
+    async fn bind_pending_split_keys(
+        &self,
+        operation_id: &str,
+        node_ids: &[TreeNodeId],
+    ) -> Result<(), LeafKeyOverrideStoreError>;
+}
 
 // ─── shared types ─────────────────────────────────────────────────────────
 
@@ -71,6 +109,24 @@ impl From<&LeafSigningKey> for FrostDerivation {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct PrepareLeafSplitKeysRequest {
+    pub operation_id: String,
+    pub parent_leaf_id: TreeNodeId,
+    pub child_count: usize,
+}
+
+#[derive(Debug, Clone)]
+pub struct PreparedLeafSplitKeys {
+    pub child_public_keys: Vec<PublicKey>,
+}
+
+#[derive(Debug, Clone)]
+pub struct BindLeafSplitKeysRequest {
+    pub operation_id: String,
+    pub child_node_ids: Vec<TreeNodeId>,
+}
+
 /// A single FROST share-signing job: produce a partial signature over
 /// `sighash`, combined against the operators' round-1 commitments.
 #[derive(Debug, Clone)]
@@ -95,6 +151,18 @@ pub struct FrostShareResult {
     pub commitment: SigningCommitments,
     /// The user's signature share (round-2 output).
     pub signature_share: SignatureShare,
+}
+
+/// The public half of a FROST nonce the signer issued for a user-commits-first
+/// flow (see [`SparkSigner::prepare_frost_nonces`]). Only the commitment is
+/// handed out: the secret nonce stays in the signer's `NonceStore` and is
+/// consumed by the one signature made under it. A caller can persist this and
+/// sign later (also after a restart when the store is durable), but cannot
+/// sign twice under it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PreparedFrostNonce {
+    pub hiding_commitment: Vec<u8>,
+    pub binding_commitment: Vec<u8>,
 }
 
 // ─── prepare_transfer ─────────────────────────────────────────────────────
@@ -390,6 +458,28 @@ pub trait SparkSigner: Send + Sync + 'static {
         false
     }
 
+    /// Prepare and durably retain child keys whose scalar sum is the parent
+    /// leaf key. Repeating an operation ID must return the same keys.
+    async fn prepare_leaf_split_keys(
+        &self,
+        _request: PrepareLeafSplitKeysRequest,
+    ) -> Result<PreparedLeafSplitKeys, SignerError> {
+        Err(SignerError::Generic(
+            "signer does not support durable leaf splitting".to_string(),
+        ))
+    }
+
+    /// Atomically bind prepared split keys to the node IDs assigned by the
+    /// operators. Once this returns, normal leaf operations must resolve them.
+    async fn bind_leaf_split_keys(
+        &self,
+        _request: BindLeafSplitKeysRequest,
+    ) -> Result<(), SignerError> {
+        Err(SignerError::Generic(
+            "signer does not support durable leaf splitting".to_string(),
+        ))
+    }
+
     /// Returns the static-deposit public key at `index`. The wallet hands this
     /// to the operators to derive a static-deposit address. Analogous to
     /// [`get_public_key_for_leaf`](Self::get_public_key_for_leaf).
@@ -422,6 +512,28 @@ pub trait SparkSigner: Send + Sync + 'static {
     /// signing, timelock renewal, static-deposit refund, lightning send, and
     /// swap (with adaptor). Results are returned in the same order as `jobs`.
     async fn sign_frost(&self, jobs: Vec<FrostJob>) -> Result<Vec<FrostShareResult>, SignerError>;
+
+    /// Prepare serializable nonce material before a user-commits-first request.
+    async fn prepare_frost_nonces(
+        &self,
+        _count: usize,
+    ) -> Result<Vec<PreparedFrostNonce>, SignerError> {
+        Err(SignerError::Generic(
+            "signer does not support persistent FROST nonces".to_string(),
+        ))
+    }
+
+    /// Sign jobs using previously prepared nonce material. The two vectors are
+    /// positional and must have the same length.
+    async fn sign_frost_with_nonces(
+        &self,
+        _jobs: Vec<FrostJob>,
+        _nonces: Vec<PreparedFrostNonce>,
+    ) -> Result<Vec<FrostShareResult>, SignerError> {
+        Err(SignerError::Generic(
+            "signer does not support persistent FROST nonces".to_string(),
+        ))
+    }
 
     /// Prepare an outbound transfer. Returns the per-operator key-tweak
     /// packages, the new per-leaf keys, and the transfer-package signature

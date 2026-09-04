@@ -20,6 +20,11 @@ pub mod spark_authn {
     tonic::include_proto!("spark_authn");
 }
 
+pub mod spark_ssp_internal {
+    #![allow(clippy::all)]
+    tonic::include_proto!("spark_ssp_internal");
+}
+
 pub mod common {
     #![allow(clippy::all)]
     tonic::include_proto!("common");

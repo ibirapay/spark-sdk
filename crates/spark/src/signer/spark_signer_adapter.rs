@@ -15,6 +15,7 @@ use bitcoin::hashes::{Hash, sha256};
 use bitcoin::secp256k1::rand::thread_rng;
 use bitcoin::secp256k1::{PublicKey, Secp256k1, SecretKey};
 use frost_secp256k1_tr::Identifier;
+use frost_secp256k1_tr::round1::{NonceCommitment, SigningCommitments};
 use prost::Message as _;
 
 use super::spark_signer::*;
@@ -38,6 +39,7 @@ const PREIMAGE_LEN: usize = 32;
 pub struct SparkSignerAdapter {
     signer: Arc<dyn Signer>,
     secp: Secp256k1<bitcoin::secp256k1::All>,
+    leaf_key_store: Option<Arc<dyn LeafKeyOverrideStore>>,
 }
 
 impl SparkSignerAdapter {
@@ -45,15 +47,33 @@ impl SparkSignerAdapter {
         Self {
             signer,
             secp: Secp256k1::new(),
+            leaf_key_store: None,
         }
+    }
+
+    #[must_use]
+    pub fn with_leaf_key_override_store(mut self, store: Arc<dyn LeafKeyOverrideStore>) -> Self {
+        self.leaf_key_store = Some(store);
+        self
     }
 
     /// Maps a flow-level [`FrostDerivation`] onto the low-level signer's
     /// [`SecretSource`] derivation path, reproducing the current key derivation
     /// exactly.
-    fn secret_source_for(&self, derivation: &FrostDerivation) -> Result<SecretSource, SignerError> {
+    async fn secret_source_for(
+        &self,
+        derivation: &FrostDerivation,
+    ) -> Result<SecretSource, SignerError> {
         match derivation {
             FrostDerivation::SigningLeaf { leaf_id } => {
+                if let Some(store) = &self.leaf_key_store
+                    && let Some(ciphertext) = store
+                        .get_leaf_key(leaf_id)
+                        .await
+                        .map_err(|e| SignerError::Generic(e.to_string()))?
+                {
+                    return Ok(SecretSource::new_encrypted(ciphertext));
+                }
                 Ok(SecretSource::Derived(signing_path(leaf_id)?))
             }
             FrostDerivation::StaticDeposit { index } => {
@@ -81,7 +101,7 @@ impl SparkSignerAdapter {
         ),
         SignerError,
     > {
-        let private_key = self.secret_source_for(derivation)?;
+        let private_key = self.secret_source_for(derivation).await?;
         let signing_public_key = self.signer.public_key_from_secret(&private_key).await?;
         let nonce_commitment = self.signer.generate_random_signing_commitment().await?;
         let user_signature = self
@@ -104,7 +124,7 @@ impl SparkSignerAdapter {
             statechain_signatures,
             statechain_public_keys,
         } = operators;
-        let private_key = self.secret_source_for(derivation)?;
+        let private_key = self.secret_source_for(derivation).await?;
         let aggregating_public_key = self.signer.public_key_from_secret(&private_key).await?;
         let user_signature = self
             .signer
@@ -142,7 +162,7 @@ impl SparkSignerAdapter {
         operator_commitments: BTreeMap<Identifier, frost_secp256k1_tr::round1::SigningCommitments>,
         adaptor_public_key: Option<&PublicKey>,
     ) -> Result<FrostShareResult, SignerError> {
-        let private_key = self.secret_source_for(derivation)?;
+        let private_key = self.secret_source_for(derivation).await?;
         let public_key = self.signer.public_key_from_secret(&private_key).await?;
         let CommittedFrostShare {
             commitments,
@@ -161,6 +181,64 @@ impl SparkSignerAdapter {
         Ok(FrostShareResult {
             commitment: commitments,
             signature_share,
+        })
+    }
+
+    /// Signs one FROST job with a nonce the signer issued earlier through
+    /// [`SparkSigner::prepare_frost_nonces`]. The signer consumes that nonce
+    /// (`Signer::sign_frost`), so presenting the same commitment twice fails with
+    /// `UnknownNonceCommitment` instead of signing twice under one nonce.
+    async fn sign_one_frost_with_nonce(
+        &self,
+        derivation: &FrostDerivation,
+        sighash: &[u8; 32],
+        verifying_key: &PublicKey,
+        operator_commitments: BTreeMap<Identifier, frost_secp256k1_tr::round1::SigningCommitments>,
+        adaptor_public_key: Option<&PublicKey>,
+        self_nonce_commitment: SigningCommitments,
+    ) -> Result<FrostShareResult, SignerError> {
+        let private_key = self.secret_source_for(derivation).await?;
+        let public_key = self.signer.public_key_from_secret(&private_key).await?;
+        let signature_share = self
+            .signer
+            .sign_frost(SignFrostRequest {
+                message: sighash,
+                public_key: &public_key,
+                private_key: &private_key,
+                verifying_key,
+                self_nonce_commitment: &self_nonce_commitment,
+                statechain_commitments: operator_commitments,
+                adaptor_public_key,
+            })
+            .await?;
+        Ok(FrostShareResult {
+            commitment: self_nonce_commitment,
+            signature_share,
+        })
+    }
+
+    fn decode_prepared_nonce(
+        nonce: &PreparedFrostNonce,
+    ) -> Result<SigningCommitments, SignerError> {
+        let hiding = NonceCommitment::deserialize(&nonce.hiding_commitment)
+            .map_err(|e| SignerError::SerializationError(e.to_string()))?;
+        let binding = NonceCommitment::deserialize(&nonce.binding_commitment)
+            .map_err(|e| SignerError::SerializationError(e.to_string()))?;
+        Ok(SigningCommitments::new(hiding, binding))
+    }
+
+    fn encode_prepared_nonce(
+        commitments: &SigningCommitments,
+    ) -> Result<PreparedFrostNonce, SignerError> {
+        Ok(PreparedFrostNonce {
+            hiding_commitment: commitments
+                .hiding()
+                .serialize()
+                .map_err(|e| SignerError::SerializationError(e.to_string()))?,
+            binding_commitment: commitments
+                .binding()
+                .serialize()
+                .map_err(|e| SignerError::SerializationError(e.to_string()))?,
         })
     }
 
@@ -205,6 +283,15 @@ impl SparkSignerAdapter {
                 .iter()
                 .map(|p| p.to_sec1_bytes().to_vec())
                 .collect(),
+        }
+    }
+
+    fn encrypted_bytes(source: &SecretSource) -> Result<Vec<u8>, SignerError> {
+        match source {
+            SecretSource::Encrypted(secret) => Ok(secret.as_slice().to_vec()),
+            SecretSource::Derived(_) => Err(SignerError::Generic(
+                "split key must be stored as an encrypted secret".to_string(),
+            )),
         }
     }
 }
@@ -270,7 +357,91 @@ impl SparkSigner for SparkSignerAdapter {
         &self,
         leaf_id: &crate::tree::TreeNodeId,
     ) -> Result<PublicKey, SignerError> {
-        self.signer.derive_public_key(&signing_path(leaf_id)?).await
+        let source = self
+            .secret_source_for(&FrostDerivation::SigningLeaf {
+                leaf_id: leaf_id.clone(),
+            })
+            .await?;
+        self.signer.public_key_from_secret(&source).await
+    }
+
+    async fn prepare_leaf_split_keys(
+        &self,
+        request: PrepareLeafSplitKeysRequest,
+    ) -> Result<PreparedLeafSplitKeys, SignerError> {
+        if request.operation_id.is_empty() {
+            return Err(SignerError::Generic(
+                "split operation ID must not be empty".to_string(),
+            ));
+        }
+        if request.child_count < 2 {
+            return Err(SignerError::Generic(
+                "a leaf split requires at least two children".to_string(),
+            ));
+        }
+        let store = self.leaf_key_store.as_ref().ok_or_else(|| {
+            SignerError::Generic("leaf key override store is not configured".to_string())
+        })?;
+
+        let encrypted_keys = if let Some(keys) = store
+            .get_pending_split_keys(&request.operation_id, &request.parent_leaf_id)
+            .await
+            .map_err(|e| SignerError::Generic(e.to_string()))?
+        {
+            if keys.len() != request.child_count {
+                return Err(SignerError::Generic(format!(
+                    "split operation {} already has {} children, requested {}",
+                    request.operation_id,
+                    keys.len(),
+                    request.child_count
+                )));
+            }
+            keys
+        } else {
+            let mut remainder = self
+                .secret_source_for(&FrostDerivation::SigningLeaf {
+                    leaf_id: request.parent_leaf_id.clone(),
+                })
+                .await?;
+            let mut children = Vec::with_capacity(request.child_count);
+            for _ in 1..request.child_count {
+                let child = SecretSource::Encrypted(self.signer.generate_random_secret().await?);
+                remainder = self.signer.subtract_secrets(&remainder, &child).await?;
+                children.push(Self::encrypted_bytes(&child)?);
+            }
+            children.push(Self::encrypted_bytes(&remainder)?);
+            store
+                .put_pending_split_keys(&request.operation_id, &request.parent_leaf_id, &children)
+                .await
+                .map_err(|e| SignerError::Generic(e.to_string()))?;
+            children
+        };
+
+        let mut child_public_keys = Vec::with_capacity(encrypted_keys.len());
+        for ciphertext in encrypted_keys {
+            child_public_keys.push(
+                self.signer
+                    .public_key_from_secret(&SecretSource::new_encrypted(ciphertext))
+                    .await?,
+            );
+        }
+        Ok(PreparedLeafSplitKeys { child_public_keys })
+    }
+
+    async fn bind_leaf_split_keys(
+        &self,
+        request: BindLeafSplitKeysRequest,
+    ) -> Result<(), SignerError> {
+        let store = self.leaf_key_store.as_ref().ok_or_else(|| {
+            SignerError::Generic("leaf key override store is not configured".to_string())
+        })?;
+        if request.child_node_ids.is_empty() {
+            return Err(SignerError::Generic("missing child node IDs".to_string()));
+        }
+        store
+            .bind_pending_split_keys(&request.operation_id, &request.child_node_ids)
+            .await
+            .map_err(|e| SignerError::Generic(e.to_string()))
     }
 
     async fn get_static_deposit_public_key(&self, index: u32) -> Result<PublicKey, SignerError> {
@@ -284,7 +455,11 @@ impl SparkSigner for SparkSignerAdapter {
         leaf_id: &crate::tree::TreeNodeId,
         sighash: &[u8],
     ) -> Result<bitcoin::secp256k1::schnorr::Signature, SignerError> {
-        let secret = SecretSource::Derived(signing_path(leaf_id)?);
+        let secret = self
+            .secret_source_for(&FrostDerivation::SigningLeaf {
+                leaf_id: leaf_id.clone(),
+            })
+            .await?;
         self.signer
             .sign_hash_schnorr_with_tweak(&secret, sighash, None)
             .await
@@ -325,6 +500,48 @@ impl SparkSigner for SparkSignerAdapter {
         Ok(results)
     }
 
+    async fn prepare_frost_nonces(
+        &self,
+        count: usize,
+    ) -> Result<Vec<PreparedFrostNonce>, SignerError> {
+        let mut result = Vec::with_capacity(count);
+        for _ in 0..count {
+            result.push(Self::encode_prepared_nonce(
+                &self.signer.generate_random_signing_commitment().await?,
+            )?);
+        }
+        Ok(result)
+    }
+
+    async fn sign_frost_with_nonces(
+        &self,
+        jobs: Vec<FrostJob>,
+        nonces: Vec<PreparedFrostNonce>,
+    ) -> Result<Vec<FrostShareResult>, SignerError> {
+        if jobs.len() != nonces.len() {
+            return Err(SignerError::Generic(format!(
+                "received {} FROST jobs and {} prepared nonces",
+                jobs.len(),
+                nonces.len()
+            )));
+        }
+        let mut results = Vec::with_capacity(jobs.len());
+        for (job, nonce) in jobs.into_iter().zip(nonces) {
+            results.push(
+                self.sign_one_frost_with_nonce(
+                    &job.derivation,
+                    &job.sighash,
+                    &job.verifying_key,
+                    job.operator_commitments,
+                    job.adaptor_public_key.as_ref(),
+                    Self::decode_prepared_nonce(&nonce)?,
+                )
+                .await?,
+            );
+        }
+        Ok(results)
+    }
+
     async fn prepare_transfer(
         &self,
         request: PrepareTransferRequest,
@@ -342,7 +559,11 @@ impl SparkSigner for SparkSignerAdapter {
         let mut new_leaf_keys = Vec::with_capacity(leaves.len());
 
         for leaf in &leaves {
-            let signing_key = SecretSource::Derived(signing_path(&leaf.signing_key.derived_from)?);
+            // The key the leaf is held under (upstream `LeafSigningKey`), resolved
+            // through the split-key store first so a split child signs with its own key.
+            let signing_key = self
+                .secret_source_for(&FrostDerivation::from(&leaf.signing_key))
+                .await?;
             let new_signing_key = SecretSource::Derived(signing_path(&leaf.new_leaf_id)?);
 
             new_leaf_keys.push(NewLeafKey {
@@ -848,5 +1069,181 @@ mod tests {
         for tweak in tweaks {
             assert_eq!(tweak.combine(&new_key).unwrap(), node_key);
         }
+    }
+}
+
+#[cfg(test)]
+mod split_tests {
+    use std::collections::HashMap;
+    use std::sync::Arc;
+
+    use macros::async_test_all;
+    use platform_utils::tokio::sync::Mutex;
+
+    use super::*;
+    use crate::Network;
+    use crate::signer::{DefaultSigner, LeafKeyOverrideStoreError};
+    use crate::tree::TreeNodeId;
+
+    type PendingKeys = HashMap<String, (TreeNodeId, Vec<Vec<u8>>)>;
+
+    #[derive(Default)]
+    struct TestLeafKeyStore {
+        pending: Mutex<PendingKeys>,
+        leaves: Mutex<HashMap<TreeNodeId, Vec<u8>>>,
+    }
+
+    #[macros::async_trait]
+    impl LeafKeyOverrideStore for TestLeafKeyStore {
+        async fn get_leaf_key(
+            &self,
+            node_id: &TreeNodeId,
+        ) -> Result<Option<Vec<u8>>, LeafKeyOverrideStoreError> {
+            Ok(self.leaves.lock().await.get(node_id).cloned())
+        }
+
+        async fn get_pending_split_keys(
+            &self,
+            operation_id: &str,
+            parent_node_id: &TreeNodeId,
+        ) -> Result<Option<Vec<Vec<u8>>>, LeafKeyOverrideStoreError> {
+            self.pending
+                .lock()
+                .await
+                .get(operation_id)
+                .map(|(stored_parent, keys)| {
+                    if stored_parent != parent_node_id {
+                        Err(LeafKeyOverrideStoreError::Generic(
+                            "operation parent mismatch".to_string(),
+                        ))
+                    } else {
+                        Ok(keys.clone())
+                    }
+                })
+                .transpose()
+        }
+
+        async fn put_pending_split_keys(
+            &self,
+            operation_id: &str,
+            parent_node_id: &TreeNodeId,
+            encrypted_keys: &[Vec<u8>],
+        ) -> Result<(), LeafKeyOverrideStoreError> {
+            let mut pending = self.pending.lock().await;
+            if let Some((existing_parent, existing)) = pending.get(operation_id) {
+                if existing_parent != parent_node_id || existing != encrypted_keys {
+                    return Err(LeafKeyOverrideStoreError::Generic(
+                        "operation key mismatch".to_string(),
+                    ));
+                }
+                return Ok(());
+            }
+            pending.insert(
+                operation_id.to_string(),
+                (parent_node_id.clone(), encrypted_keys.to_vec()),
+            );
+            Ok(())
+        }
+
+        async fn bind_pending_split_keys(
+            &self,
+            operation_id: &str,
+            node_ids: &[TreeNodeId],
+        ) -> Result<(), LeafKeyOverrideStoreError> {
+            let keys = self
+                .pending
+                .lock()
+                .await
+                .get(operation_id)
+                .map(|(_, keys)| keys.clone())
+                .ok_or_else(|| LeafKeyOverrideStoreError::Generic("missing keys".to_string()))?;
+            if keys.len() != node_ids.len() {
+                return Err(LeafKeyOverrideStoreError::Generic(
+                    "key count mismatch".to_string(),
+                ));
+            }
+            let mut leaves = self.leaves.lock().await;
+            for (node_id, key) in node_ids.iter().cloned().zip(keys) {
+                if let Some(existing) = leaves.get(&node_id)
+                    && existing != &key
+                {
+                    return Err(LeafKeyOverrideStoreError::Generic(
+                        "bound key mismatch".to_string(),
+                    ));
+                }
+                leaves.insert(node_id, key);
+            }
+            Ok(())
+        }
+    }
+
+    fn combine(keys: &[PublicKey]) -> PublicKey {
+        keys[1..]
+            .iter()
+            .try_fold(keys[0], |sum, key| sum.combine(key))
+            .unwrap()
+    }
+
+    #[async_test_all]
+    async fn split_keys_conserve_parent_and_survive_restart_and_resplit() {
+        let store = Arc::new(TestLeafKeyStore::default());
+        let low_signer = Arc::new(DefaultSigner::new(&[42; 32], Network::Regtest).unwrap());
+        let parent_id = TreeNodeId::generate();
+        let adapter =
+            SparkSignerAdapter::new(low_signer.clone()).with_leaf_key_override_store(store.clone());
+        let parent_public_key = adapter.get_public_key_for_leaf(&parent_id).await.unwrap();
+
+        let first = adapter
+            .prepare_leaf_split_keys(PrepareLeafSplitKeysRequest {
+                operation_id: "first".to_string(),
+                parent_leaf_id: parent_id.clone(),
+                child_count: 3,
+            })
+            .await
+            .unwrap();
+        assert_eq!(combine(&first.child_public_keys), parent_public_key);
+        let retry = adapter
+            .prepare_leaf_split_keys(PrepareLeafSplitKeysRequest {
+                operation_id: "first".to_string(),
+                parent_leaf_id: parent_id,
+                child_count: 3,
+            })
+            .await
+            .unwrap();
+        assert_eq!(retry.child_public_keys, first.child_public_keys);
+
+        let child_ids = vec![
+            TreeNodeId::generate(),
+            TreeNodeId::generate(),
+            TreeNodeId::generate(),
+        ];
+        adapter
+            .bind_leaf_split_keys(BindLeafSplitKeysRequest {
+                operation_id: "first".to_string(),
+                child_node_ids: child_ids.clone(),
+            })
+            .await
+            .unwrap();
+
+        let restarted = SparkSignerAdapter::new(low_signer).with_leaf_key_override_store(store);
+        assert_eq!(
+            restarted
+                .get_public_key_for_leaf(&child_ids[0])
+                .await
+                .unwrap(),
+            first.child_public_keys[0]
+        );
+        let second = restarted
+            .prepare_leaf_split_keys(PrepareLeafSplitKeysRequest {
+                operation_id: "second".to_string(),
+                parent_leaf_id: child_ids[0].clone(),
+                child_count: 2,
+            })
+            .await
+            .unwrap();
+        assert_eq!(
+            combine(&second.child_public_keys),
+            first.child_public_keys[0]
+        );
     }
 }
