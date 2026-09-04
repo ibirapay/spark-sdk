@@ -676,6 +676,21 @@ impl SparkSigner for SparkSignerAdapter {
             threshold,
         } = request;
 
+        // A transferred leaf keeps its node ID while ownership rotates its key.
+        // If this wallet created the leaf by splitting it, the old override is
+        // stale once the leaf comes back: claims always rotate to signing_path.
+        // Retire it durably before any refund-key lookup can observe it.
+        if let Some(store) = &self.leaf_key_store {
+            let node_ids = leaves
+                .iter()
+                .map(|leaf| leaf.node.id.clone())
+                .collect::<Vec<_>>();
+            store
+                .retire_leaf_keys(&node_ids)
+                .await
+                .map_err(|e| SignerError::Generic(e.to_string()))?;
+        }
+
         let mut per_operator: BTreeMap<Identifier, Vec<proto::ClaimLeafKeyTweak>> = BTreeMap::new();
 
         for leaf in &leaves {
@@ -1082,8 +1097,10 @@ mod split_tests {
 
     use super::*;
     use crate::Network;
+    use crate::services::TransferId;
     use crate::signer::{DefaultSigner, LeafKeyOverrideStoreError};
     use crate::tree::TreeNodeId;
+    use crate::tree::tests::create_test_tree_node;
 
     type PendingKeys = HashMap<String, (TreeNodeId, Vec<Vec<u8>>)>;
 
@@ -1175,6 +1192,17 @@ mod split_tests {
             }
             Ok(())
         }
+
+        async fn retire_leaf_keys(
+            &self,
+            node_ids: &[TreeNodeId],
+        ) -> Result<(), LeafKeyOverrideStoreError> {
+            let mut leaves = self.leaves.lock().await;
+            for node_id in node_ids {
+                leaves.remove(node_id);
+            }
+            Ok(())
+        }
     }
 
     fn combine(keys: &[PublicKey]) -> PublicKey {
@@ -1244,6 +1272,93 @@ mod split_tests {
         assert_eq!(
             combine(&second.child_public_keys),
             first.child_public_keys[0]
+        );
+    }
+
+    #[async_test_all]
+    async fn claiming_a_previously_split_node_retires_its_stale_override() {
+        let store = Arc::new(TestLeafKeyStore::default());
+        let low_signer = Arc::new(DefaultSigner::new(&[43; 32], Network::Regtest).unwrap());
+        let adapter =
+            SparkSignerAdapter::new(low_signer.clone()).with_leaf_key_override_store(store.clone());
+        let parent_id = TreeNodeId::generate();
+        let prepared = adapter
+            .prepare_leaf_split_keys(PrepareLeafSplitKeysRequest {
+                operation_id: "claim-rotation".to_string(),
+                parent_leaf_id: parent_id.clone(),
+                child_count: 2,
+            })
+            .await
+            .unwrap();
+        let child_ids = vec![TreeNodeId::generate(), TreeNodeId::generate()];
+        adapter
+            .bind_leaf_split_keys(BindLeafSplitKeysRequest {
+                operation_id: "claim-rotation".to_string(),
+                child_node_ids: child_ids.clone(),
+            })
+            .await
+            .unwrap();
+
+        let returning_id = child_ids[0].clone();
+        assert_eq!(
+            adapter
+                .get_public_key_for_leaf(&returning_id)
+                .await
+                .unwrap(),
+            prepared.child_public_keys[0]
+        );
+        let derived_key = low_signer
+            .derive_public_key(&signing_path(&returning_id).unwrap())
+            .await
+            .unwrap();
+        assert_ne!(derived_key, prepared.child_public_keys[0]);
+
+        let identity_public_key = adapter.get_identity_public_key().await.unwrap();
+        let incoming_secret = low_signer.generate_random_secret().await.unwrap();
+        let incoming_ciphertext = low_signer
+            .encrypt_secret_for_receiver(
+                &SecretSource::Encrypted(incoming_secret),
+                &identity_public_key,
+            )
+            .await
+            .unwrap();
+        let operator_recipients = (0..3)
+            .map(|id| OperatorRecipient {
+                id,
+                identifier: Identifier::try_from((id + 1) as u16).unwrap(),
+                public_key: identity_public_key,
+            })
+            .collect();
+
+        adapter
+            .prepare_claim(PrepareClaimRequest {
+                transfer_id: TransferId::generate(),
+                sender_identity_public_key: identity_public_key,
+                leaves: vec![ClaimLeafInput {
+                    node: create_test_tree_node(&returning_id.to_string(), 2_000),
+                    sender_signature: Vec::new(),
+                    leaf_key_ciphertext: incoming_ciphertext,
+                }],
+                operator_recipients,
+                threshold: 2,
+            })
+            .await
+            .unwrap();
+
+        assert_eq!(
+            adapter
+                .get_public_key_for_leaf(&returning_id)
+                .await
+                .unwrap(),
+            derived_key
+        );
+        assert!(
+            store
+                .get_pending_split_keys("claim-rotation", &parent_id)
+                .await
+                .unwrap()
+                .is_some(),
+            "retiring a bound override must not delete its pending split record"
         );
     }
 }

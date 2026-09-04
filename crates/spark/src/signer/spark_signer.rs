@@ -52,6 +52,13 @@ pub trait LeafKeyOverrideStore: Send + Sync + 'static {
         operation_id: &str,
         node_ids: &[TreeNodeId],
     ) -> Result<(), LeafKeyOverrideStoreError>;
+
+    /// Atomically retire bound overrides for leaves arriving in a transfer.
+    /// Missing IDs are a no-op and pending split records must remain intact.
+    async fn retire_leaf_keys(
+        &self,
+        node_ids: &[TreeNodeId],
+    ) -> Result<(), LeafKeyOverrideStoreError>;
 }
 
 // ─── shared types ─────────────────────────────────────────────────────────
