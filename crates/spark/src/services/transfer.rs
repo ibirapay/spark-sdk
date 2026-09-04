@@ -7,7 +7,11 @@ use crate::address::SparkAddress;
 use crate::operator::OperatorPool;
 use crate::operator::rpc as operator_rpc;
 use crate::operator::rpc::spark::transfer_filter::Participant;
-use crate::operator::rpc::spark::{HashVariant, StartTransferRequest, TransferFilter};
+use crate::operator::rpc::OperatorRpcError;
+use crate::operator::rpc::spark::{
+    AdaptorPublicKeyPackage, HashVariant, InitiateSwapCounterTransferRequest, StartTransferRequest,
+    TransferFilter,
+};
 use crate::services::models::{
     LeafKeyTweak, Transfer, convert_page, map_signing_nonce_commitments,
     split_signing_commitments_by_variant,
@@ -220,6 +224,63 @@ impl TransferService {
             None,
         )
         .await
+    }
+
+    /// Sends the SSP leg of a Swap V3 operation and atomically settles the
+    /// referenced primary transfer.
+    pub async fn transfer_swap_counter(
+        &self,
+        leaves: Vec<TreeNode>,
+        receiver_id: &PublicKey,
+        primary_transfer_id: &TransferId,
+        adaptor_public_key: &PublicKey,
+        transfer_id: &TransferId,
+    ) -> Result<Transfer, ServiceError> {
+        if leaves.is_empty() {
+            return Err(ServiceError::InvalidInput(
+                "counter transfer requires at least one leaf".to_string(),
+            ));
+        }
+
+        self.notify_before_send_transfer(transfer_id, receiver_id, &leaves, None)
+            .await?;
+        let leaf_key_tweaks = prepare_leaf_key_tweaks_to_send(leaves);
+        let mut prepared = self
+            .prepare_transfer_request(
+                transfer_id,
+                &leaf_key_tweaks,
+                receiver_id,
+                None,
+                None,
+                Some(adaptor_public_key),
+            )
+            .await?;
+        if let Some(package) = prepared.transfer_request.transfer_package.as_mut() {
+            package.direct_leaves_to_send.clear();
+            package.direct_from_cpfp_leaves_to_send.clear();
+        }
+
+        let response = self
+            .operator_pool
+            .get_coordinator()
+            .client
+            .initiate_swap_counter_transfer(InitiateSwapCounterTransferRequest {
+                transfer: Some(prepared.transfer_request),
+                adaptor_public_keys: Some(AdaptorPublicKeyPackage {
+                    adaptor_public_key: adaptor_public_key.serialize().to_vec(),
+                    direct_adaptor_public_key: Vec::new(),
+                    direct_from_cpfp_adaptor_public_key: Vec::new(),
+                }),
+                primary_transfer_id: primary_transfer_id.to_string(),
+            })
+            .await?;
+
+        response
+            .transfer
+            .ok_or_else(|| {
+                ServiceError::Generic("counter transfer response is missing transfer".to_string())
+            })?
+            .try_into()
     }
 
     async fn send_transfer_inner(

@@ -39,7 +39,8 @@ use spark::{
         rpc::{
             ConnectionManager, DefaultConnectionManager, OperatorRpcError,
             spark::{
-                PreimageRequestRole, QuerySparkInvoicesRequest, UpdateWalletSettingRequest,
+                PreimageRequestRole, QuerySparkInvoicesRequest, StorePreimageShareV2Request,
+                UpdateWalletSettingRequest,
                 update_wallet_setting_request::MasterIdentityPublicKey as ProtoMasterIdentityPublicKey,
             },
         },
@@ -1146,6 +1147,66 @@ impl SparkWallet {
             .await
     }
 
+    /// Sends exact-denomination leaves as the SSP counter leg of a Swap V3
+    /// operation. This method never starts another leaf swap.
+    pub async fn transfer_swap_counter(
+        &self,
+        target_amounts_sats: Vec<u64>,
+        receiver_address: &SparkAddress,
+        primary_transfer_id: TransferId,
+        adaptor_public_key: PublicKey,
+        transfer_id: TransferId,
+    ) -> Result<WalletTransfer, SparkWalletError> {
+        if target_amounts_sats.is_empty() || target_amounts_sats.contains(&0) {
+            return Err(SparkWalletError::ValidationError(
+                "counter transfer amounts must be positive".to_string(),
+            ));
+        }
+        if self.config.network != receiver_address.network {
+            return Err(SparkWalletError::InvalidNetwork);
+        }
+        if !self.config.self_payment_allowed
+            && receiver_address.identity_public_key == self.identity_public_key
+        {
+            return Err(SparkWalletError::SelfPaymentNotAllowed);
+        }
+
+        self.tree_service.refresh_leaves().await?;
+        let leaves = self.tree_service.list_leaves().await?.available;
+        let targets = TargetAmounts::new_exact_denominations(target_amounts_sats);
+        let selected = select_leaves_by_target_amounts(&leaves, Some(&targets))?.amount_leaves;
+        let selected_ids = selected
+            .iter()
+            .map(|leaf| leaf.id.clone())
+            .collect::<Vec<_>>();
+        let reservation = self
+            .tree_service
+            .reserve_leaves_by_ids(&selected_ids, ReservationPurpose::Payment)
+            .await?;
+
+        let transfer = with_reserved_leaves(
+            self.tree_service.as_ref(),
+            self.transfer_service.transfer_swap_counter(
+                reservation.leaves.clone(),
+                &receiver_address.identity_public_key,
+                &primary_transfer_id,
+                &adaptor_public_key,
+                &transfer_id,
+            ),
+            &reservation,
+        )
+        .await?;
+
+        self.on_leaves_changed().await;
+        Ok(WalletTransfer::from_transfer(
+            transfer,
+            None,
+            None,
+            self.identity_public_key,
+            self.config.service_provider_config.identity_public_key,
+        ))
+    }
+
     async fn transfer_with_invoice(
         &self,
         amount_sat: u64,
@@ -1508,6 +1569,53 @@ impl SparkWallet {
     /// anything else signed under it, and never sign a counterparty's message.
     pub async fn sign_message(&self, message: &str) -> Result<Signature, SparkWalletError> {
         Ok(self.spark_signer.sign_message(message.as_bytes()).await?)
+    }
+
+    /// Queries HTLC records owned by this wallet.
+    pub async fn query_htlc(
+        &self,
+        transfer_ids: Vec<String>,
+        payment_hashes: Vec<String>,
+        status: Option<PreimageRequestStatus>,
+        match_role: PreimageRequestRole,
+        paging: Option<PagingFilter>,
+    ) -> Result<PagingResult<PreimageRequestWithTransfer>, SparkWalletError> {
+        Ok(self
+            .htlc_service
+            .query_htlc(
+                QueryHtlcFilter {
+                    transfer_ids,
+                    payment_hashes,
+                    identity_public_key: self.identity_public_key,
+                    status,
+                    match_role,
+                },
+                paging,
+            )
+            .await?)
+    }
+
+    /// Stores SSP-encrypted preimage shares through the coordinator.
+    pub async fn store_preimage_shares(
+        &self,
+        payment_hash: Vec<u8>,
+        encrypted_preimage_shares: HashMap<String, Vec<u8>>,
+        threshold: u32,
+        invoice: String,
+        owner_identity_public_key: PublicKey,
+    ) -> Result<(), SparkWalletError> {
+        self.operator_pool
+            .get_coordinator()
+            .client
+            .store_preimage_share_v2(StorePreimageShareV2Request {
+                payment_hash,
+                encrypted_preimage_shares,
+                threshold,
+                invoice_string: invoice,
+                user_identity_public_key: owner_identity_public_key.serialize().to_vec(),
+            })
+            .await?;
+        Ok(())
     }
 
     /// Verifies a message was signed by the given public key and the signature is valid.

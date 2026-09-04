@@ -268,6 +268,23 @@ impl SparkRpcClient {
     }
 
     #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
+    pub async fn initiate_swap_counter_transfer(
+        &self,
+        req: InitiateSwapCounterTransferRequest,
+    ) -> Result<StartTransferResponse> {
+        trace!(
+            "Calling initiate_swap_counter_transfer with request: {:?}",
+            req
+        );
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.initiate_swap_counter_transfer(req).await?) }
+        })
+        .await
+    }
+
+    #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
     pub async fn renew_leaf(
         &self,
         req: RenewLeafRequest,
