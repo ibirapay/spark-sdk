@@ -71,7 +71,7 @@ use spark::{
         LeafOptimizer, LeafPedigree, LeafSelection, OptimizationError, OptimizationOutcome,
         ReservationPurpose, SelectLeavesOptions, SynchronousTreeService, TargetAmounts, TreeNode,
         TreeNodeId, TreeNodeStatus, TreeService, TreeStore, chain_reaches_root,
-        select_leaves_by_target_amounts, with_reserved_leaves,
+        select_leaves_by_exact_amounts, select_leaves_by_target_amounts, with_reserved_leaves,
     },
     utils::{
         leaf_key_tweak::with_node_id_keys,
@@ -1173,8 +1173,7 @@ impl SparkWallet {
 
         self.tree_service.refresh_leaves().await?;
         let leaves = self.tree_service.list_leaves().await?.available;
-        let targets = TargetAmounts::new_exact_denominations(target_amounts_sats);
-        let selected = select_leaves_by_target_amounts(&leaves, Some(&targets))?.amount_leaves;
+        let selected = select_leaves_by_exact_amounts(&leaves, &target_amounts_sats)?;
         let selected_ids = selected
             .iter()
             .map(|leaf| leaf.id.clone())

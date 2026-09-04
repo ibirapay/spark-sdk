@@ -98,6 +98,33 @@ pub fn select_leaves_by_exact_denominations<L: LeafLike>(
     Ok(selected_leaves)
 }
 
+/// Selects a separate exact-sum batch for each requested amount.
+///
+/// Smaller amounts are selected first because they have fewer possible leaf
+/// combinations. The returned vector contains every selected leaf once.
+pub fn select_leaves_by_exact_amounts<L: LeafLike>(
+    leaves: &[L],
+    target_amounts: &[u64],
+) -> Result<Vec<L>, TreeServiceError> {
+    let mut remaining_leaves = leaves.to_vec();
+    let mut sorted_targets = target_amounts.to_vec();
+    sorted_targets.sort_unstable();
+    let mut selected_leaves = Vec::new();
+
+    for target in sorted_targets {
+        let selected = select_leaves_by_exact_amount(&remaining_leaves, target)?
+            .ok_or(TreeServiceError::UnselectableAmount)?;
+        remaining_leaves.retain(|leaf| {
+            !selected
+                .iter()
+                .any(|selected_leaf| selected_leaf.leaf_id() == leaf.leaf_id())
+        });
+        selected_leaves.extend(selected);
+    }
+
+    Ok(selected_leaves)
+}
+
 /// Selects leaves from the tree that sum up to at least the target amount.
 pub fn select_leaves_by_minimum_amount<L: LeafLike>(
     leaves: &[L],

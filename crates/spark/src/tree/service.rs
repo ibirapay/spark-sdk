@@ -1284,7 +1284,9 @@ mod tests {
         ssp::{RetryConfig, ServiceProvider, ServiceProviderConfig},
         tree::{
             InMemoryTreeStore, SigningKeyshare, TreeNode, TreeNodeId, TreeNodeStatus,
-            select_helper::{find_exact_multiple_match, find_exact_single_match},
+            select_helper::{
+                find_exact_multiple_match, find_exact_single_match, select_leaves_by_exact_amounts,
+            },
             tests::create_test_node_with_parent,
         },
     };
@@ -2133,6 +2135,25 @@ mod tests {
         let selected = result.unwrap();
         let total: u64 = selected.iter().map(|leaf| leaf.value).sum();
         assert_eq!(total, 12288);
+    }
+
+    #[test_all]
+    fn test_select_exact_amount_batches_from_composed_leaves() {
+        let leaves = create_test_leaves(&[32_000, 32_000, 16_000, 16_000, 2_000, 2_000]);
+
+        let selected = select_leaves_by_exact_amounts(&leaves, &[50_000, 50_000]).unwrap();
+
+        assert_eq!(selected.iter().map(|leaf| leaf.value).sum::<u64>(), 100_000);
+        assert_eq!(selected.len(), 6);
+    }
+
+    #[test_all]
+    fn test_select_exact_amount_batches_do_not_reuse_leaves() {
+        let leaves = create_test_leaves(&[32_000, 16_000, 2_000]);
+
+        let error = select_leaves_by_exact_amounts(&leaves, &[50_000, 50_000]).unwrap_err();
+
+        assert!(matches!(error, TreeServiceError::InsufficientFunds));
     }
 
     #[test_all]
