@@ -1479,6 +1479,26 @@ impl SparkWallet {
         .await
     }
 
+    /// Gets one transfer by id, including internal swap transfer types that
+    /// are not part of the normal wallet history returned by
+    /// [`Self::list_transfers`].
+    pub async fn get_transfer(
+        &self,
+        transfer_id: &TransferId,
+    ) -> Result<Option<WalletTransfer>, SparkWalletError> {
+        let Some(transfer) = self.transfer_service.query_transfer(transfer_id).await? else {
+            return Ok(None);
+        };
+
+        Ok(Some(WalletTransfer::from_transfer(
+            transfer,
+            None,
+            None,
+            self.identity_public_key,
+            self.ssp_client.identity_public_key(),
+        )))
+    }
+
     pub async fn list_pending_transfers(
         &self,
         paging: Option<PagingFilter>,
