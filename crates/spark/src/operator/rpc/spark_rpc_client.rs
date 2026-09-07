@@ -76,6 +76,40 @@ impl SparkRpcClient {
         }
     }
 
+    pub async fn query_ssp_static_deposit_addresses(
+        &self,
+        req: QueryStaticDepositAddressesRequest,
+    ) -> Result<QueryStaticDepositAddressesResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.query_static_deposit_addresses(req).await?) }
+        })
+        .await
+    }
+
+    pub async fn initiate_static_deposit_swap(
+        &self,
+        req: super::spark_ssp_internal::StaticDepositSwapRequest,
+    ) -> Result<super::spark_ssp_internal::StaticDepositSwapResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.initiate_static_deposit_swap(req).await?) }
+        })
+        .await
+    }
+
+    /// Read leaves for a withdrawal on the private, authenticated SSP listener.
+    pub async fn query_ssp_nodes(&self, req: QueryNodesRequest) -> Result<QueryNodesResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.query_nodes(req).await?) }
+        })
+        .await
+    }
+
     #[instrument(level = "info", target = "spark::operator_rpc", skip_all, fields(operator_id = self.operator_id))]
     pub async fn prepare_tree_address(
         &self,
