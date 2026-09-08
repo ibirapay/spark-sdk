@@ -23,7 +23,7 @@ use crate::{
 
 pub struct ServiceProvider {
     identity_public_key: PublicKey,
-    gql_client: GraphQLClient,
+    pub(super) gql_client: GraphQLClient,
 }
 
 impl ServiceProvider {

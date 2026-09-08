@@ -72,6 +72,11 @@ pub use spark_wallet::{
     CombinedHeaderProvider, HeaderProvider, HeaderProviderError, PublicKey, account_master_key,
     identity_master_key, identity_public_key,
 };
+pub use spark_wallet::{
+    InstantStaticDepositPlan, InstantStaticDepositQuote, InstantStaticDepositQuoteResult,
+    RequestHistoryFilter, RequestLightningReceiveInput, RequestLightningSendInput, RequestPage,
+    RequestRecord, ServiceProvider,
+};
 
 #[cfg(any(feature = "postgres", feature = "db-storage-api"))]
 pub use persist::{

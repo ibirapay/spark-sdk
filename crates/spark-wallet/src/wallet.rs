@@ -1538,6 +1538,11 @@ impl SparkWallet {
         Ok(claimed)
     }
 
+    /// The authenticated SSP client used by this wallet.
+    pub fn service_provider(&self) -> Arc<ServiceProvider> {
+        self.ssp_client.clone()
+    }
+
     /// Queries the SSP for user requests by their associated transfer IDs
     /// and returns a map of transfer IDs to user requests
     pub async fn query_ssp_user_requests(

@@ -99,3 +99,8 @@ pub use spark::token::tests as token_store_tests;
 
 #[cfg(feature = "test-utils")]
 pub use spark::services::Transfer;
+pub use spark::ssp::{
+    InstantStaticDepositPlan, InstantStaticDepositQuote, InstantStaticDepositQuoteResult,
+    RequestHistoryFilter, RequestLightningReceiveInput, RequestLightningSendInput, RequestPage,
+    RequestRecord, ServiceProvider,
+};

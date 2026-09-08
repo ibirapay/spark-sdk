@@ -12,6 +12,7 @@ mod lnurl;
 mod payments;
 mod recover_funds;
 mod runtime;
+mod ssp;
 mod sync;
 mod sync_coordinator;
 mod token_allowances;
