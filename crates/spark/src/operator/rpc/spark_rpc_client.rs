@@ -100,6 +100,31 @@ impl SparkRpcClient {
         .await
     }
 
+    /// Reserve an instant deposit and send its Spark advance.
+    pub async fn reserve_instant_deposit(
+        &self,
+        req: super::spark_ssp_internal::ReserveInstantDepositRequest,
+    ) -> Result<super::spark_ssp_internal::ReserveInstantDepositResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.reserve_instant_deposit(req).await?) }
+        })
+        .await
+    }
+
+    pub async fn recover_instant_deposit(
+        &self,
+        req: super::spark_ssp_internal::RecoverInstantDepositRequest,
+    ) -> Result<super::spark_ssp_internal::StaticDepositSwapResponse> {
+        self.call_with_auth_retry(|interceptor| {
+            let mut client = self.spark_ssp_internal_service_client(interceptor);
+            let req = req.clone();
+            async move { Ok(client.recover_instant_deposit(req).await?) }
+        })
+        .await
+    }
+
     /// Read leaves for a withdrawal on the private, authenticated SSP listener.
     pub async fn query_ssp_nodes(&self, req: QueryNodesRequest) -> Result<QueryNodesResponse> {
         self.call_with_auth_retry(|interceptor| {
