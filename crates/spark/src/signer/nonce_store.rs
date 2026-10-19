@@ -106,7 +106,7 @@ impl NonceStore {
 mod durable {
     use std::fs::{self, File, OpenOptions};
     use std::io::{ErrorKind, Write};
-    use std::path::{Path, PathBuf};
+    use std::path::PathBuf;
 
     use bitcoin::hashes::{Hash, sha256};
     use bitcoin::secp256k1::rand::{RngCore, thread_rng};
@@ -123,8 +123,11 @@ mod durable {
     /// `<id>.signed` record: the request hash and the share. The record is
     /// created with a hard link, which fails when it exists, so of two
     /// concurrent signers exactly one publishes; the other's share is dropped
-    /// unreleased. ponytail: `.signed` and `.nonce` files are never swept; add
-    /// a sweep keyed on age if the directory grows.
+    /// unreleased. A nonce and a share made with it reveal the signing key
+    /// share together, so the `.nonce` is deleted (and the deletion synced)
+    /// before any share is returned, and `open` sweeps any pair or temporary
+    /// file a crash left behind. ponytail: `.signed` records and never-signed
+    /// `.nonce` files are kept; add an age-keyed sweep if the directory grows.
     pub(super) struct Dir {
         path: PathBuf,
     }
@@ -138,7 +141,49 @@ mod durable {
                 fs::set_permissions(&path, fs::Permissions::from_mode(0o700))
                     .map_err(|e| io("restrict directory", e))?;
             }
-            Ok(Self { path })
+            let dir = Self { path };
+            dir.sweep()?;
+            Ok(dir)
+        }
+
+        /// Deletes what a crash can leave: temporary files (one may hold a share
+        /// next to its live nonce) and the nonce of every signed record.
+        fn sweep(&self) -> Result<(), SignerError> {
+            let entries = fs::read_dir(&self.path).map_err(|e| io("list directory", e))?;
+            let mut removed = false;
+            for entry in entries {
+                let path = entry.map_err(|e| io("list directory", e))?.path();
+                let name = path
+                    .file_name()
+                    .and_then(|n| n.to_str())
+                    .unwrap_or_default();
+                let stale = if name.ends_with(".tmp") {
+                    Some(path.clone())
+                } else {
+                    name.strip_suffix(".signed")
+                        .map(|id| self.file(id, "nonce"))
+                        .filter(|nonce| nonce.exists())
+                };
+                if let Some(stale) = stale {
+                    fs::remove_file(&stale).map_err(|e| io("sweep", e))?;
+                    removed = true;
+                }
+            }
+            if removed {
+                self.sync_dir()?;
+            }
+            Ok(())
+        }
+
+        /// Deletes the nonce of a signed record, synced, before its share leaves.
+        fn forget_nonce(&self, id: &str) -> Result<(), SignerError> {
+            match fs::remove_file(self.file(id, "nonce")) {
+                // Synced also when another signer deleted it: that deletion may
+                // not be on disk yet either.
+                Ok(()) => self.sync_dir(),
+                Err(e) if e.kind() == ErrorKind::NotFound => self.sync_dir(),
+                Err(e) => Err(io("delete nonce", e)),
+            }
         }
 
         fn id(commitments: &SigningCommitments) -> Result<String, SignerError> {
@@ -194,7 +239,7 @@ mod durable {
             let id = Self::id(commitments)?;
             let signed = self.file(&id, "signed");
             if signed.exists() {
-                return self.released_share(&signed, request_hash);
+                return self.released_share(&id, request_hash);
             }
             let nonces = match fs::read(self.file(&id, "nonce")) {
                 Ok(bytes) => SigningNonces::deserialize(&bytes)
@@ -220,14 +265,14 @@ mod durable {
                 Ok(()) => {}
                 // Another signer published first: answer from its record.
                 Err(e) if e.kind() == ErrorKind::AlreadyExists => {
-                    return self.released_share(&signed, request_hash);
+                    return self.released_share(&id, request_hash);
                 }
                 Err(e) => return Err(io("journal share", e)),
             }
             // The record must be on disk before the share leaves: a share released
             // without it could be followed by a second, different one.
             self.sync_dir()?;
-            let _ = fs::remove_file(self.file(&id, "nonce"));
+            self.forget_nonce(&id)?;
             Ok(share)
         }
 
@@ -238,10 +283,10 @@ mod durable {
         /// its record is on disk.
         fn released_share(
             &self,
-            path: &Path,
+            id: &str,
             request_hash: [u8; 32],
         ) -> Result<SignatureShare, SignerError> {
-            let record = fs::read(path).map_err(|e| io("read share", e))?;
+            let record = fs::read(self.file(id, "signed")).map_err(|e| io("read share", e))?;
             let (hash, share) = record.split_at_checked(32).ok_or_else(|| {
                 SignerError::Generic("durable nonce store: truncated share record".to_string())
             })?;
@@ -249,6 +294,7 @@ mod durable {
                 return Err(SignerError::UnknownNonceCommitment);
             }
             self.sync_dir()?;
+            self.forget_nonce(id)?;
             SignatureShare::deserialize(share)
                 .map_err(|e| SignerError::SerializationError(e.to_string()))
         }
@@ -371,6 +417,47 @@ mod tests {
             .filter(|ok| *ok)
             .count();
         assert_eq!(released, 1);
+    }
+
+    fn files(dir: &std::path::Path) -> Vec<String> {
+        let mut names: Vec<String> = std::fs::read_dir(dir)
+            .unwrap()
+            .map(|e| e.unwrap().file_name().into_string().unwrap())
+            .collect();
+        names.sort();
+        names
+    }
+
+    #[test]
+    fn a_released_share_leaves_no_nonce_behind() {
+        let dir = temp_dir("no-pair");
+        let store = NonceStore::durable(&dir).unwrap();
+        let issued = nonces();
+        let commitments = *issued.commitments();
+        store.insert(issued).unwrap();
+        store.sign_with(&commitments, [1; 32], fresh_share).unwrap();
+
+        let left = files(&dir);
+        assert!(left.iter().all(|f| f.ends_with(".signed")), "{left:?}");
+    }
+
+    #[test]
+    fn opening_the_store_sweeps_what_a_crash_left() {
+        let dir = temp_dir("sweep");
+        let store = NonceStore::durable(&dir).unwrap();
+        let issued = nonces();
+        let commitments = *issued.commitments();
+        store.insert(issued).unwrap();
+        let nonce = files(&dir).pop().unwrap();
+        let nonce_bytes = std::fs::read(dir.join(&nonce)).unwrap();
+        store.sign_with(&commitments, [1; 32], fresh_share).unwrap();
+        // A crash before the nonce deletion reached the disk, mid-journal.
+        std::fs::write(dir.join(&nonce), nonce_bytes).unwrap();
+        std::fs::write(dir.join("leftover.0000000000000000.tmp"), [0u8; 64]).unwrap();
+
+        drop(NonceStore::durable(&dir).unwrap());
+        let left = files(&dir);
+        assert!(left.iter().all(|f| f.ends_with(".signed")), "{left:?}");
     }
 
     #[test]
