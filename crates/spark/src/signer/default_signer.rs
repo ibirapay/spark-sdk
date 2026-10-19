@@ -84,6 +84,9 @@ pub struct DefaultSigner {
     /// The master node every key is derived from.
     master: Xpriv,
     secp: Secp256k1<All>,
+    /// When set, each nonce commitment releases at most one share.
+    #[cfg(not(target_family = "wasm"))]
+    journal: Option<std::sync::Arc<crate::signer::SignJournal>>,
 }
 
 #[derive(Debug, Error)]
@@ -118,7 +121,24 @@ impl DefaultSigner {
         DefaultSigner {
             master,
             secp: Secp256k1::new(),
+            #[cfg(not(target_family = "wasm"))]
+            journal: None,
         }
+    }
+
+    /// Binds every nonce commitment to the first request it signs, durably: a
+    /// retry of that request gets the same share, any other request is refused.
+    /// Opt-in: a signer whose prepared commitments are persisted or can be signed
+    /// again (a service provider) must enable it. Without it, the caller is trusted
+    /// to sign each commitment once.
+    #[cfg(not(target_family = "wasm"))]
+    #[must_use]
+    pub fn with_sign_journal(
+        mut self,
+        journal: std::sync::Arc<crate::signer::SignJournal>,
+    ) -> Self {
+        self.journal = Some(journal);
+        self
     }
 }
 
@@ -359,7 +379,19 @@ impl Signer for DefaultSigner {
         request: SignFrostRequest<'a>,
     ) -> Result<SignatureShare, SignerError> {
         tracing::trace!("default_signer::sign_frost");
+        #[cfg(not(target_family = "wasm"))]
+        if let Some(journal) = &self.journal {
+            let request_hash = frost_request_hash(&request)?;
+            let commitments = request.self_nonce_commitment.commitments;
+            return journal.sign_with(&commitments, request_hash, || self.frost_share(request));
+        }
+        self.frost_share(request)
+    }
+}
 
+impl DefaultSigner {
+    /// The round-2 share for `request`, with the nonces its commitment carries.
+    fn frost_share(&self, request: SignFrostRequest<'_>) -> Result<SignatureShare, SignerError> {
         // Derive a deterministic identifier for the local user from the string "user"
         let user_identifier =
             Identifier::derive("user".as_bytes()).map_err(|_| SignerError::IdentifierError)?;
@@ -454,7 +486,7 @@ impl Signer for DefaultSigner {
 
         // Return the generated signature share to be combined with other shares
         // from the statechain participants to form a complete threshold signature
-        return Ok(signature_share);
+        Ok(signature_share)
     }
 }
 
@@ -467,6 +499,43 @@ impl SecretSource {
             }
         }
     }
+}
+
+/// Everything a FROST share depends on, hashed with each field length-prefixed:
+/// two requests share a hash only when they would produce the same share.
+#[cfg(not(target_family = "wasm"))]
+fn frost_request_hash(request: &SignFrostRequest<'_>) -> Result<[u8; 32], SignerError> {
+    use bitcoin::hashes::{Hash, HashEngine, sha256};
+    fn field(engine: &mut sha256::HashEngine, bytes: &[u8]) {
+        engine.input(&(bytes.len() as u64).to_be_bytes());
+        engine.input(bytes);
+    }
+    let serialize = |c: &frost_secp256k1_tr::round1::SigningCommitments| {
+        c.serialize()
+            .map_err(|e| SignerError::SerializationError(e.to_string()))
+    };
+    let mut engine = sha256::Hash::engine();
+    field(&mut engine, b"spark/frost-request/v1");
+    field(&mut engine, request.message);
+    field(&mut engine, &request.public_key.serialize());
+    field(&mut engine, &request.verifying_key.serialize());
+    field(
+        &mut engine,
+        &serialize(&request.self_nonce_commitment.commitments)?,
+    );
+    for (identifier, commitments) in &request.statechain_commitments {
+        field(&mut engine, &identifier.serialize());
+        field(&mut engine, &serialize(commitments)?);
+    }
+    match request.adaptor_public_key {
+        Some(key) => field(&mut engine, &key.serialize()),
+        None => field(&mut engine, &[]),
+    }
+    match request.private_key {
+        SecretSource::Derived(path) => field(&mut engine, path.to_string().as_bytes()),
+        SecretSource::Encrypted(secret) => field(&mut engine, secret.as_slice()),
+    }
+    Ok(sha256::Hash::from_engine(engine).to_byte_array())
 }
 
 #[cfg(test)]
@@ -765,5 +834,69 @@ pub(crate) mod tests {
             .expect("Failed to decrypt nonces");
 
         assert_eq!(&commitments.commitments, signing_nonces.commitments());
+    }
+
+    /// The old signer signs whatever commitment it is handed; with a journal a
+    /// commitment releases one share, for one request, also across a restart.
+    #[cfg(not(target_family = "wasm"))]
+    #[tokio::test]
+    async fn test_sign_journal_binds_a_commitment_to_one_request() {
+        use std::sync::Arc;
+
+        use crate::signer::{SignFrostRequest, SignJournal};
+
+        fn request<'a>(
+            message: &'a [u8],
+            public_key: &'a PublicKey,
+            private_key: &'a SecretSource,
+            commitment: &'a crate::signer::FrostSigningCommitmentsWithNonces,
+        ) -> SignFrostRequest<'a> {
+            SignFrostRequest {
+                message,
+                public_key,
+                private_key,
+                verifying_key: public_key,
+                self_nonce_commitment: commitment,
+                statechain_commitments: std::collections::BTreeMap::new(),
+                adaptor_public_key: None,
+            }
+        }
+
+        let dir = std::env::temp_dir().join(format!(
+            "spark-sign-journal-signer-{}",
+            SecretKey::new(&mut thread_rng()).display_secret()
+        ));
+        let journaled =
+            || create_test_signer().with_sign_journal(Arc::new(SignJournal::open(&dir).unwrap()));
+        let signer = journaled();
+        let private_key = SecretSource::Derived(DerivationPath::from_str("m/3'/0'").unwrap());
+        let public_key = signer.public_key_from_secret(&private_key).await.unwrap();
+        let commitment = signer.generate_random_signing_commitment().await.unwrap();
+
+        // Without a journal the same commitment signs two different messages.
+        let plain = create_test_signer();
+        plain
+            .sign_frost(request(&[1; 32], &public_key, &private_key, &commitment))
+            .await
+            .unwrap();
+        plain
+            .sign_frost(request(&[2; 32], &public_key, &private_key, &commitment))
+            .await
+            .unwrap();
+
+        let first = signer
+            .sign_frost(request(&[1; 32], &public_key, &private_key, &commitment))
+            .await
+            .unwrap();
+        let retried = journaled()
+            .sign_frost(request(&[1; 32], &public_key, &private_key, &commitment))
+            .await
+            .unwrap();
+        assert_eq!(first.serialize(), retried.serialize());
+        let err = journaled()
+            .sign_frost(request(&[2; 32], &public_key, &private_key, &commitment))
+            .await
+            .expect_err("a second request under one commitment must be refused");
+        assert!(matches!(err, SignerError::UnknownNonceCommitment));
     }
 }

@@ -2,6 +2,8 @@ mod default_signer;
 mod error;
 mod models;
 mod secret_sharing;
+#[cfg(not(target_family = "wasm"))]
+mod sign_journal;
 mod spark_signer;
 mod spark_signer_adapter;
 
@@ -17,6 +19,8 @@ pub use default_signer::{
 };
 pub use error::SignerError;
 pub use models::*;
+#[cfg(not(target_family = "wasm"))]
+pub use sign_journal::SignJournal;
 pub use spark_signer::*;
 pub use spark_signer_adapter::SparkSignerAdapter;
 
