@@ -1117,4 +1117,54 @@ pub(crate) mod tests {
             .expect_err("the shared nonce is still single-use");
         assert!(matches!(err, SignerError::UnknownNonceCommitment));
     }
+
+    /// A durable store keeps an issued nonce across a restart: a new signer on a
+    /// new store instance over the same directory signs with it once, and only once.
+    #[cfg(not(target_family = "wasm"))]
+    #[tokio::test]
+    async fn test_durable_nonce_signs_once_after_a_restart() {
+        let dir = std::env::temp_dir().join(format!(
+            "spark-durable-signer-{}",
+            SecretKey::new(&mut thread_rng()).display_secret()
+        ));
+        let master = account_master_key(&[42u8; 32], Network::Regtest, None).unwrap();
+        let private_key = SecretSource::Derived(DerivationPath::from_str("m/3'/0'").unwrap());
+
+        let before_restart =
+            DefaultSigner::with_nonce_store(master, Arc::new(NonceStore::durable(&dir).unwrap()));
+        let commitment = before_restart
+            .generate_random_signing_commitment()
+            .await
+            .unwrap();
+        drop(before_restart);
+
+        let after_restart =
+            DefaultSigner::with_nonce_store(master, Arc::new(NonceStore::durable(&dir).unwrap()));
+        let public_key = after_restart
+            .public_key_from_secret(&private_key)
+            .await
+            .unwrap();
+        after_restart
+            .sign_frost(frost_request(
+                &[1u8; 32],
+                &public_key,
+                &private_key,
+                &commitment,
+            ))
+            .await
+            .expect("the nonce issued before the restart signs once");
+
+        let again =
+            DefaultSigner::with_nonce_store(master, Arc::new(NonceStore::durable(&dir).unwrap()));
+        let err = again
+            .sign_frost(frost_request(
+                &[2u8; 32],
+                &public_key,
+                &private_key,
+                &commitment,
+            ))
+            .await
+            .expect_err("a consumed durable nonce must not sign again");
+        assert!(matches!(err, SignerError::UnknownNonceCommitment));
+    }
 }
