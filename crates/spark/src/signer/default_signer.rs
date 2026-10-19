@@ -554,12 +554,48 @@ impl Signer for DefaultSigner {
     ) -> Result<SignatureShare, SignerError> {
         tracing::trace!("default_signer::sign_frost");
 
-        // Taken before anything else that can fail, so a caller cannot trip a
-        // later step and retry the nonce.
-        let signing_nonces = self.nonces.take(request.self_nonce_commitment)?;
-
-        self.frost_share(request, &signing_nonces)
+        // The store releases one share per nonce, bound to this exact request,
+        // so a retry of the same request is answered and any other is refused.
+        let request_hash = frost_request_hash(&request)?;
+        let commitment = *request.self_nonce_commitment;
+        self.nonces
+            .sign_with(&commitment, request_hash, |signing_nonces| {
+                self.frost_share(request, signing_nonces)
+            })
     }
+}
+
+/// Everything a FROST share depends on, hashed with each field length-prefixed:
+/// two requests share a hash only when they would produce the same share.
+fn frost_request_hash(request: &SignFrostRequest<'_>) -> Result<[u8; 32], SignerError> {
+    use bitcoin::hashes::{Hash, HashEngine, sha256};
+    fn field(engine: &mut sha256::HashEngine, bytes: &[u8]) {
+        engine.input(&(bytes.len() as u64).to_be_bytes());
+        engine.input(bytes);
+    }
+    let serialize = |c: &SigningCommitments| {
+        c.serialize()
+            .map_err(|e| SignerError::SerializationError(e.to_string()))
+    };
+    let mut engine = sha256::Hash::engine();
+    field(&mut engine, b"spark/frost-request/v1");
+    field(&mut engine, request.message);
+    field(&mut engine, &request.public_key.serialize());
+    field(&mut engine, &request.verifying_key.serialize());
+    field(&mut engine, &serialize(request.self_nonce_commitment)?);
+    for (identifier, commitments) in &request.statechain_commitments {
+        field(&mut engine, &identifier.serialize());
+        field(&mut engine, &serialize(commitments)?);
+    }
+    match request.adaptor_public_key {
+        Some(key) => field(&mut engine, &key.serialize()),
+        None => field(&mut engine, &[]),
+    }
+    match request.private_key {
+        SecretSource::Derived(path) => field(&mut engine, path.to_string().as_bytes()),
+        SecretSource::Encrypted(secret) => field(&mut engine, secret.as_slice()),
+    }
+    Ok(sha256::Hash::from_engine(engine).to_byte_array())
 }
 
 impl SecretSource {
@@ -1153,9 +1189,28 @@ pub(crate) mod tests {
             ))
             .await
             .expect("the nonce issued before the restart signs once");
+        let first_share = after_restart
+            .sign_frost(frost_request(
+                &[1u8; 32],
+                &public_key,
+                &private_key,
+                &commitment,
+            ))
+            .await
+            .expect("a retry of the same request is answered");
 
         let again =
             DefaultSigner::with_nonce_store(master, Arc::new(NonceStore::durable(&dir).unwrap()));
+        let retried = again
+            .sign_frost(frost_request(
+                &[1u8; 32],
+                &public_key,
+                &private_key,
+                &commitment,
+            ))
+            .await
+            .expect("a retry after another restart is answered");
+        assert_eq!(retried.serialize(), first_share.serialize());
         let err = again
             .sign_frost(frost_request(
                 &[2u8; 32],
@@ -1164,7 +1219,7 @@ pub(crate) mod tests {
                 &commitment,
             ))
             .await
-            .expect_err("a consumed durable nonce must not sign again");
+            .expect_err("a nonce that signed one request must not sign another");
         assert!(matches!(err, SignerError::UnknownNonceCommitment));
     }
 }

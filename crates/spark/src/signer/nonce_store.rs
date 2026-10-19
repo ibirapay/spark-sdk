@@ -2,6 +2,7 @@ use std::collections::VecDeque;
 use std::sync::Mutex;
 
 use frost_secp256k1_tr::round1::{SigningCommitments, SigningNonces};
+use frost_secp256k1_tr::round2::SignatureShare;
 
 use crate::signer::SignerError;
 
@@ -35,11 +36,12 @@ impl NonceStore {
     }
 
     /// A store that keeps each issued nonce in its own file under `dir`, so a
-    /// flow that commits before a restart can still sign after it. Single use
-    /// holds across processes: taking a nonce renames its file away and syncs
-    /// the directory before the nonce is returned, so a crash after the take
-    /// loses the nonce instead of offering it again. `dir` holds secrets: keep
-    /// it as private as the seed.
+    /// flow that commits before a restart can still sign after it.
+    ///
+    /// A nonce releases at most one signature share, for one request: the share
+    /// is journaled with a hash of the request before it is returned. Repeating
+    /// that request returns the same share (a retry after a crash), any other
+    /// request is refused. `dir` holds secrets: keep it as private as the seed.
     #[cfg(not(target_family = "wasm"))]
     pub fn durable(dir: impl Into<std::path::PathBuf>) -> Result<Self, SignerError> {
         Ok(Self {
@@ -62,18 +64,27 @@ impl NonceStore {
         Ok(())
     }
 
-    /// Consumes the nonces behind `commitments`, so a second call for the same
-    /// commitment fails. Errors with [`SignerError::UnknownNonceCommitment`]
-    /// when the commitment was not issued here, was already signed with, or was
-    /// evicted.
-    pub(crate) fn take(
+    /// Produces the share for `request_hash` with the nonces behind
+    /// `commitments`, through `sign`. Errors with
+    /// [`SignerError::UnknownNonceCommitment`] when the commitment was not issued
+    /// here, was evicted, or already signed a different request.
+    pub(crate) fn sign_with(
         &self,
         commitments: &SigningCommitments,
-    ) -> Result<SigningNonces, SignerError> {
+        request_hash: [u8; 32],
+        sign: impl FnOnce(&SigningNonces) -> Result<SignatureShare, SignerError>,
+    ) -> Result<SignatureShare, SignerError> {
         #[cfg(not(target_family = "wasm"))]
         if let Some(dir) = &self.durable {
-            return dir.take(commitments);
+            return dir.sign_with(commitments, request_hash, sign);
         }
+        let _ = request_hash;
+        // Taken before signing, so a failed attempt cannot be retried with it.
+        let nonces = self.take(commitments)?;
+        sign(&nonces)
+    }
+
+    fn take(&self, commitments: &SigningCommitments) -> Result<SigningNonces, SignerError> {
         let mut pending = self.lock()?;
         let at = pending
             .iter()
@@ -98,7 +109,9 @@ mod durable {
     use std::path::{Path, PathBuf};
 
     use bitcoin::hashes::{Hash, sha256};
+    use bitcoin::secp256k1::rand::{RngCore, thread_rng};
     use frost_secp256k1_tr::round1::{SigningCommitments, SigningNonces};
+    use frost_secp256k1_tr::round2::SignatureShare;
 
     use crate::signer::SignerError;
 
@@ -106,11 +119,12 @@ mod durable {
         SignerError::Generic(format!("durable nonce store: {context}: {e}"))
     }
 
-    /// Nonce files, one per issued commitment. `<id>.nonce` is pending; a take
-    /// renames it to `<id>.taken` before reading it. Renames are atomic, so of
-    /// two concurrent takes exactly one wins, and a `.taken` file left by a
-    /// crash is never read again. ponytail: `.taken` leftovers and abandoned
-    /// `.nonce` files are not swept; add a sweep if the directory grows.
+    /// One `<id>.nonce` file per issued commitment and, once it signs, one
+    /// `<id>.signed` record: the request hash and the share. The record is
+    /// created with a hard link, which fails when it exists, so of two
+    /// concurrent signers exactly one publishes; the other's share is dropped
+    /// unreleased. ponytail: `.signed` and `.nonce` files are never swept; add
+    /// a sweep keyed on age if the directory grows.
     pub(super) struct Dir {
         path: PathBuf,
     }
@@ -134,20 +148,19 @@ mod durable {
             Ok(sha256::Hash::hash(&bytes).to_string())
         }
 
+        fn file(&self, id: &str, kind: &str) -> PathBuf {
+            self.path.join(format!("{id}.{kind}"))
+        }
+
         fn sync_dir(&self) -> Result<(), SignerError> {
             File::open(&self.path)
                 .and_then(|dir| dir.sync_all())
                 .map_err(|e| io("sync directory", e))
         }
 
-        pub(super) fn insert(&self, nonces: &SigningNonces) -> Result<(), SignerError> {
-            let id = Self::id(nonces.commitments())?;
-            let bytes = nonces
-                .serialize()
-                .map_err(|e| SignerError::SerializationError(e.to_string()))?;
-            // Written under a temporary name and renamed, so a reader never sees
-            // a partial nonce file.
-            let tmp = self.path.join(format!("{id}.tmp"));
+        /// Writes `bytes` to a fresh private temporary file, synced.
+        fn write_temp(&self, id: &str, bytes: &[u8]) -> Result<PathBuf, SignerError> {
+            let tmp = self.file(id, &format!("{:016x}.tmp", thread_rng().next_u64()));
             let mut options = OpenOptions::new();
             options.write(true).create_new(true);
             #[cfg(unix)]
@@ -155,47 +168,90 @@ mod durable {
                 use std::os::unix::fs::OpenOptionsExt;
                 options.mode(0o600);
             }
-            let mut file = options.open(&tmp).map_err(|e| io("create nonce", e))?;
-            file.write_all(&bytes)
+            let mut file = options.open(&tmp).map_err(|e| io("create file", e))?;
+            file.write_all(bytes)
                 .and_then(|()| file.sync_all())
-                .map_err(|e| io("write nonce", e))?;
-            fs::rename(&tmp, self.path.join(format!("{id}.nonce")))
-                .map_err(|e| io("publish nonce", e))?;
+                .map_err(|e| io("write file", e))?;
+            Ok(tmp)
+        }
+
+        pub(super) fn insert(&self, nonces: &SigningNonces) -> Result<(), SignerError> {
+            let id = Self::id(nonces.commitments())?;
+            let bytes = nonces
+                .serialize()
+                .map_err(|e| SignerError::SerializationError(e.to_string()))?;
+            let tmp = self.write_temp(&id, &bytes)?;
+            fs::rename(&tmp, self.file(&id, "nonce")).map_err(|e| io("publish nonce", e))?;
             self.sync_dir()
         }
 
-        pub(super) fn take(
+        pub(super) fn sign_with(
             &self,
             commitments: &SigningCommitments,
-        ) -> Result<SigningNonces, SignerError> {
+            request_hash: [u8; 32],
+            sign: impl FnOnce(&SigningNonces) -> Result<SignatureShare, SignerError>,
+        ) -> Result<SignatureShare, SignerError> {
             let id = Self::id(commitments)?;
-            let pending = self.path.join(format!("{id}.nonce"));
-            let taken = self.path.join(format!("{id}.taken"));
-            match fs::rename(&pending, &taken) {
-                Ok(()) => {}
+            let signed = self.file(&id, "signed");
+            if signed.exists() {
+                return self.released_share(&signed, request_hash);
+            }
+            let nonces = match fs::read(self.file(&id, "nonce")) {
+                Ok(bytes) => SigningNonces::deserialize(&bytes)
+                    .map_err(|e| SignerError::SerializationError(e.to_string()))?,
                 Err(e) if e.kind() == ErrorKind::NotFound => {
                     return Err(SignerError::UnknownNonceCommitment);
                 }
-                Err(e) => return Err(io("take nonce", e)),
-            }
-            // The take must be on disk before the nonce is used: otherwise a crash
-            // after signing could bring the pending file back.
-            self.sync_dir()?;
-            let nonces = read_nonces(&taken)?;
+                Err(e) => return Err(io("read nonce", e)),
+            };
             if nonces.commitments() != commitments {
                 return Err(SignerError::Generic(
                     "durable nonce store: nonce file does not match its commitment".to_string(),
                 ));
             }
-            fs::remove_file(&taken).map_err(|e| io("remove taken nonce", e))?;
-            Ok(nonces)
-        }
-    }
+            let share = sign(&nonces)?;
 
-    fn read_nonces(path: &Path) -> Result<SigningNonces, SignerError> {
-        let bytes = fs::read(path).map_err(|e| io("read nonce", e))?;
-        SigningNonces::deserialize(&bytes)
-            .map_err(|e| SignerError::SerializationError(e.to_string()))
+            let mut record = request_hash.to_vec();
+            record.extend_from_slice(&share.serialize());
+            let tmp = self.write_temp(&id, &record)?;
+            let published = fs::hard_link(&tmp, &signed);
+            let _ = fs::remove_file(&tmp);
+            match published {
+                Ok(()) => {}
+                // Another signer published first: answer from its record.
+                Err(e) if e.kind() == ErrorKind::AlreadyExists => {
+                    return self.released_share(&signed, request_hash);
+                }
+                Err(e) => return Err(io("journal share", e)),
+            }
+            // The record must be on disk before the share leaves: a share released
+            // without it could be followed by a second, different one.
+            self.sync_dir()?;
+            let _ = fs::remove_file(self.file(&id, "nonce"));
+            Ok(share)
+        }
+
+        /// The share a nonce already released, if `request_hash` is the request it
+        /// signed. Any other request is refused: answering it would sign twice.
+        /// The directory is synced first: the record may have just been linked by
+        /// a signer that has not synced yet, and a share must never leave before
+        /// its record is on disk.
+        fn released_share(
+            &self,
+            path: &Path,
+            request_hash: [u8; 32],
+        ) -> Result<SignatureShare, SignerError> {
+            let record = fs::read(path).map_err(|e| io("read share", e))?;
+            let (hash, share) = record.split_at_checked(32).ok_or_else(|| {
+                SignerError::Generic("durable nonce store: truncated share record".to_string())
+            })?;
+            if hash != request_hash {
+                return Err(SignerError::UnknownNonceCommitment);
+            }
+            self.sync_dir()?;
+            SignatureShare::deserialize(share)
+                .map_err(|e| SignerError::SerializationError(e.to_string()))
+        }
     }
 }
 
@@ -208,6 +264,7 @@ mod tests {
     use bitcoin::secp256k1::rand::thread_rng;
     use frost_core::round1::Nonce;
     use frost_secp256k1_tr::round1::SigningNonces;
+    use frost_secp256k1_tr::round2::SignatureShare;
 
     use super::NonceStore;
     use crate::signer::SignerError;
@@ -228,82 +285,101 @@ mod tests {
         dir
     }
 
-    fn is_unknown(result: Result<SigningNonces, SignerError>) -> bool {
+    /// A stand-in share that differs per call, so a cached answer is visible.
+    fn fresh_share(_: &SigningNonces) -> Result<SignatureShare, SignerError> {
+        Ok(SignatureShare::deserialize(&SecretKey::new(&mut thread_rng()).secret_bytes()).unwrap())
+    }
+
+    fn is_unknown<T>(result: &Result<T, SignerError>) -> bool {
         matches!(result, Err(SignerError::UnknownNonceCommitment))
     }
 
     #[test]
-    fn a_durable_nonce_is_taken_once() {
-        let store = NonceStore::durable(temp_dir("once")).unwrap();
+    fn a_nonce_signs_one_request_and_refuses_another() {
+        let store = NonceStore::durable(temp_dir("one-request")).unwrap();
         let issued = nonces();
         let commitments = *issued.commitments();
         store.insert(issued).unwrap();
 
-        assert_eq!(
-            store.take(&commitments).unwrap().commitments(),
-            &commitments
-        );
-        assert!(is_unknown(store.take(&commitments)));
+        store.sign_with(&commitments, [1; 32], fresh_share).unwrap();
+        assert!(is_unknown(&store.sign_with(
+            &commitments,
+            [2; 32],
+            fresh_share
+        )));
     }
 
     #[test]
-    fn a_durable_nonce_survives_a_restart_and_is_still_single_use() {
-        let dir = temp_dir("restart");
+    fn retrying_the_same_request_returns_the_same_share() {
+        let dir = temp_dir("retry");
         let issued = nonces();
         let commitments = *issued.commitments();
         NonceStore::durable(&dir).unwrap().insert(issued).unwrap();
 
-        let after_restart = NonceStore::durable(&dir).unwrap();
-        assert!(after_restart.take(&commitments).is_ok());
-        assert!(is_unknown(
-            NonceStore::durable(&dir).unwrap().take(&commitments)
-        ));
+        let first = NonceStore::durable(&dir)
+            .unwrap()
+            .sign_with(&commitments, [1; 32], fresh_share)
+            .unwrap();
+        // A crash after the share was released: the retry runs on a new store.
+        let retried = NonceStore::durable(&dir)
+            .unwrap()
+            .sign_with(&commitments, [1; 32], fresh_share)
+            .unwrap();
+        assert_eq!(first.serialize(), retried.serialize());
     }
 
     #[test]
-    fn a_nonce_taken_before_a_crash_is_never_offered_again() {
+    fn a_crash_before_the_share_is_journaled_leaves_the_nonce_signable() {
         let dir = temp_dir("crash");
-        let store = NonceStore::durable(&dir).unwrap();
         let issued = nonces();
         let commitments = *issued.commitments();
-        store.insert(issued).unwrap();
-        // A crash between the rename and the read leaves only the `.taken` file.
-        let pending = std::fs::read_dir(&dir)
-            .unwrap()
-            .next()
-            .unwrap()
-            .unwrap()
-            .path();
-        std::fs::rename(&pending, pending.with_extension("taken")).unwrap();
+        NonceStore::durable(&dir).unwrap().insert(issued).unwrap();
 
-        assert!(is_unknown(
-            NonceStore::durable(&dir).unwrap().take(&commitments)
-        ));
+        let crashed = NonceStore::durable(&dir)
+            .unwrap()
+            .sign_with(&commitments, [1; 32], |_| {
+                Err(SignerError::Generic("crash".to_string()))
+            });
+        assert!(crashed.is_err());
+        assert!(
+            NonceStore::durable(&dir)
+                .unwrap()
+                .sign_with(&commitments, [2; 32], fresh_share)
+                .is_ok()
+        );
     }
 
     #[test]
-    fn concurrent_takes_of_one_nonce_succeed_once() {
+    fn concurrent_signers_release_one_share() {
         let store = Arc::new(NonceStore::durable(temp_dir("race")).unwrap());
         let issued = nonces();
         let commitments = *issued.commitments();
         store.insert(issued).unwrap();
 
-        let wins = (0..8)
-            .map(|_| {
+        let released = (0..8u8)
+            .map(|request| {
                 let store = Arc::clone(&store);
-                std::thread::spawn(move || store.take(&commitments).is_ok())
+                std::thread::spawn(move || {
+                    store
+                        .sign_with(&commitments, [request; 32], fresh_share)
+                        .is_ok()
+                })
             })
             .collect::<Vec<_>>()
             .into_iter()
             .map(|handle| handle.join().unwrap())
-            .filter(|won| *won)
+            .filter(|ok| *ok)
             .count();
-        assert_eq!(wins, 1);
+        assert_eq!(released, 1);
     }
 
     #[test]
     fn an_unknown_commitment_is_refused() {
         let store = NonceStore::durable(temp_dir("unknown")).unwrap();
-        assert!(is_unknown(store.take(nonces().commitments())));
+        assert!(is_unknown(&store.sign_with(
+            nonces().commitments(),
+            [1; 32],
+            fresh_share
+        )));
     }
 }
