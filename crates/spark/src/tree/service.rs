@@ -17,7 +17,7 @@ use crate::{
     operator::{
         OperatorPool,
         rpc::{
-            SparkRpcClient,
+            OperatorRpcError, SparkRpcClient,
             spark::{
                 QueryNodesRequest, TreeNodeIds, TreeNodeStatus as ProtoTreeNodeStatus,
                 query_nodes_request::Source,
@@ -389,14 +389,10 @@ impl TreeService for SynchronousTreeService {
 
         // Leaves only. Asking for each leaf's ancestors here would re-download every
         // chain on every refresh, including the ones already stored.
-        let coord_fut = self.query_nodes(&coordinator_client, false, None, held_leaf_statuses());
-        let op_futs = operators.iter().map(|(id, client)| async move {
-            (
-                *id,
-                self.query_nodes(client, false, None, held_leaf_statuses())
-                    .await,
-            )
-        });
+        let coord_fut = self.query_held_leaves(&coordinator_client);
+        let op_futs = operators
+            .iter()
+            .map(|(id, client)| async move { (*id, self.query_held_leaves(client).await) });
 
         let (coordinator_leaves_res, operator_results) = tokio::join!(coord_fut, join_all(op_futs));
         // Status cannot pick the leaves out of the response any more: now that a
@@ -404,7 +400,7 @@ impl TreeService for SynchronousTreeService {
         // back `OnChain` as the leaf below it. Go by shape instead, and drop what
         // another node in the same response calls its parent: an ancestor is not
         // a leaf, whatever status it is in.
-        let coordinator_nodes = coordinator_leaves_res?;
+        let (coordinator_nodes, coordinator_narrowed) = coordinator_leaves_res?;
         let parent_ids: HashSet<TreeNodeId> = coordinator_nodes
             .iter()
             .filter_map(|n| n.parent_node_id.clone())
@@ -423,7 +419,9 @@ impl TreeService for SynchronousTreeService {
         let mut operator_leaves_vec: Vec<Vec<TreeNode>> = Vec::new();
         for (id, res) in operator_results {
             match res {
-                Ok(leaves) => operator_leaves_vec.push(leaves),
+                // A narrowed operator leaves out a returned leaf the coordinator
+                // reports, which then counts as missing from it: kept, not spent.
+                Ok((leaves, _narrowed)) => operator_leaves_vec.push(leaves),
                 Err(e) => {
                     error!("Failed to query operator {id}: {e:?}");
                     return Err(e);
@@ -512,7 +510,7 @@ impl TreeService for SynchronousTreeService {
                     && !ignored_leaves_map.contains_key(&leaf.id)
             })
             .collect::<Vec<_>>();
-        let missing_operator_leaves = missing_operator_leaves_map
+        let mut missing_operator_leaves = missing_operator_leaves_map
             .values()
             .filter(|leaf_id| !ignored_leaves_map.contains_key(&leaf_id.id))
             .cloned()
@@ -527,6 +525,17 @@ impl TreeService for SynchronousTreeService {
         } = self.check_renew_nodes(bare_pedigrees(renewable)).await?;
         let mut renewed_leaves: Vec<TreeNode> = pedigrees.iter().map(|p| p.leaf.clone()).collect();
         renewed_leaves.extend(exiting);
+        if coordinator_narrowed {
+            let stored_returned = self
+                .state
+                .get_leaves_with_status(&[TreeNodeStatus::Returned])
+                .await?;
+            let kept = unseen_returned_leaves(
+                stored_returned,
+                renewed_leaves.iter().chain(&missing_operator_leaves),
+            );
+            missing_operator_leaves.extend(kept);
+        }
         self.state
             .set_leaves(
                 &renewed_leaves,
@@ -942,6 +951,29 @@ impl SynchronousTreeService {
         })
     }
 
+    /// The leaves `client` holds for us, and whether it had to be asked without
+    /// `Returned` (see [`may_predate_returned_status`]).
+    // ponytail: retries on every refresh against a legacy operator (one extra failing RPC each);
+    // remember the narrowing per operator if that ever shows up in latency.
+    async fn query_held_leaves(
+        &self,
+        client: &SparkRpcClient,
+    ) -> Result<(Vec<TreeNode>, bool), TreeServiceError> {
+        match self
+            .query_nodes(client, false, None, held_leaf_statuses())
+            .await
+        {
+            Err(e) if may_predate_returned_status(&e) => {
+                warn!("Leaf query failed as Internal, retrying without RETURNED: {e:?}");
+                let leaves = self
+                    .query_nodes(client, false, None, legacy_held_leaf_statuses())
+                    .await?;
+                Ok((leaves, true))
+            }
+            res => res.map(|leaves| (leaves, false)),
+        }
+    }
+
     async fn query_nodes(
         &self,
         client: &SparkRpcClient,
@@ -1230,6 +1262,42 @@ fn held_leaf_statuses() -> Vec<i32> {
         ProtoTreeNodeStatus::WatchtowerExitRecovered as i32,
         ProtoTreeNodeStatus::Returned as i32,
     ]
+}
+
+/// [`held_leaf_statuses`] without `Returned`, for an operator that predates it.
+fn legacy_held_leaf_statuses() -> Vec<i32> {
+    let returned = ProtoTreeNodeStatus::Returned as i32;
+    held_leaf_statuses()
+        .into_iter()
+        .filter(|status| *status != returned)
+        .collect()
+}
+
+/// Whether a leaf query may have failed the way an operator that predates
+/// `TREE_NODE_STATUS_RETURNED` (16) fails it. The public buildonspark operator
+/// cannot map the status and fails the whole query with an uncoded error, which
+/// reaches us as `Internal` with its message masked unless the operator returns
+/// detailed errors. So any `Internal` counts, and the caller keeps the returned
+/// leaves the narrower query cannot see.
+fn may_predate_returned_status(err: &TreeServiceError) -> bool {
+    matches!(err, TreeServiceError::RpcError(e)
+        if matches!(e.as_ref(), OperatorRpcError::Connection(status)
+            if status.code() == tonic::Code::Internal))
+}
+
+/// The stored returned leaves a narrowed refresh did not report at all. The
+/// coordinator was not asked for returned leaves, so their absence says nothing
+/// about whether they were spent: they are kept, flagged missing from the
+/// operators, until a refresh that can ask for them settles them.
+fn unseen_returned_leaves<'a>(
+    stored_returned: Vec<TreeNode>,
+    reported: impl Iterator<Item = &'a TreeNode>,
+) -> Vec<TreeNode> {
+    let reported: HashSet<&TreeNodeId> = reported.map(|leaf| &leaf.id).collect();
+    stored_returned
+        .into_iter()
+        .filter(|leaf| !reported.contains(&leaf.id))
+        .collect()
 }
 
 fn query_nodes_request(
@@ -2043,6 +2111,48 @@ mod tests {
     /// every operator at once. `TransferLocked` is deliberately not among them: a
     /// leaf of ours in that status is one we are sending, and re-reading it would
     /// undo the send.
+    /// An operator that predates `Returned` is asked again for everything else,
+    /// and only an `Internal` failure, which is how it refuses status 16, sets
+    /// that off.
+    #[test_all]
+    fn a_legacy_operator_is_asked_without_returned() {
+        let mut expected = held_leaf_statuses();
+        expected.retain(|s| *s != ProtoTreeNodeStatus::Returned as i32);
+        assert_eq!(legacy_held_leaf_statuses(), expected);
+        assert_eq!(expected.len() + 1, held_leaf_statuses().len());
+
+        let rpc = |status| {
+            TreeServiceError::RpcError(Box::new(OperatorRpcError::Connection(Box::new(status))))
+        };
+        assert!(may_predate_returned_status(&rpc(tonic::Status::internal(
+            "Something went wrong."
+        ))));
+        assert!(!may_predate_returned_status(&rpc(
+            tonic::Status::unavailable("down")
+        )));
+        assert!(!may_predate_returned_status(&TreeServiceError::Generic(
+            "x".to_string()
+        )));
+    }
+
+    /// After a narrowed refresh a stored returned leaf the coordinator did not
+    /// report is kept, and one it reported (in any status) is left to the refresh.
+    #[test_all]
+    fn a_narrowed_refresh_keeps_unseen_returned_leaves() {
+        let node = |id, status| create_test_node_with_parent(id, Some("root"), status);
+        let unseen = node("unseen", TreeNodeStatus::Returned);
+        let reported = node("reported", TreeNodeStatus::Returned);
+        let reported_now = node("reported", TreeNodeStatus::Available);
+
+        let kept =
+            unseen_returned_leaves(vec![unseen.clone(), reported], [&reported_now].into_iter());
+
+        assert_eq!(
+            kept.iter().map(|l| &l.id).collect::<Vec<_>>(),
+            vec![&unseen.id]
+        );
+    }
+
     #[test_all]
     fn refresh_query_requests_held_leaf_statuses() {
         let owner = PublicKey::from_slice(&[2; 33]).unwrap();
