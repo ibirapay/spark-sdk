@@ -1,0 +1,4184 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'errors.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+// dart format off
+T _$identity<T>(T value) => value;
+/// @nodoc
+mixin _$CooperativeRecoveryError {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CooperativeRecoveryError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CooperativeRecoveryError()';
+}
+
+
+}
+
+/// @nodoc
+class $CooperativeRecoveryErrorCopyWith<$Res>  {
+$CooperativeRecoveryErrorCopyWith(CooperativeRecoveryError _, $Res Function(CooperativeRecoveryError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [CooperativeRecoveryError].
+extension CooperativeRecoveryErrorPatterns on CooperativeRecoveryError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CooperativeRecoveryError_ReplacementFeeTooLow value)?  replacementFeeTooLow,TResult Function( CooperativeRecoveryError_OperatorsUnavailable value)?  operatorsUnavailable,TResult Function( CooperativeRecoveryError_Generic value)?  generic,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow() when replacementFeeTooLow != null:
+return replacementFeeTooLow(_that);case CooperativeRecoveryError_OperatorsUnavailable() when operatorsUnavailable != null:
+return operatorsUnavailable(_that);case CooperativeRecoveryError_Generic() when generic != null:
+return generic(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CooperativeRecoveryError_ReplacementFeeTooLow value)  replacementFeeTooLow,required TResult Function( CooperativeRecoveryError_OperatorsUnavailable value)  operatorsUnavailable,required TResult Function( CooperativeRecoveryError_Generic value)  generic,}){
+final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow():
+return replacementFeeTooLow(_that);case CooperativeRecoveryError_OperatorsUnavailable():
+return operatorsUnavailable(_that);case CooperativeRecoveryError_Generic():
+return generic(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CooperativeRecoveryError_ReplacementFeeTooLow value)?  replacementFeeTooLow,TResult? Function( CooperativeRecoveryError_OperatorsUnavailable value)?  operatorsUnavailable,TResult? Function( CooperativeRecoveryError_Generic value)?  generic,}){
+final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow() when replacementFeeTooLow != null:
+return replacementFeeTooLow(_that);case CooperativeRecoveryError_OperatorsUnavailable() when operatorsUnavailable != null:
+return operatorsUnavailable(_that);case CooperativeRecoveryError_Generic() when generic != null:
+return generic(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( BigInt requiredFeeSats,  BigInt requiredFeeRateSatPerVbyte)?  replacementFeeTooLow,TResult Function( String message)?  operatorsUnavailable,TResult Function( String message)?  generic,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow() when replacementFeeTooLow != null:
+return replacementFeeTooLow(_that.requiredFeeSats,_that.requiredFeeRateSatPerVbyte);case CooperativeRecoveryError_OperatorsUnavailable() when operatorsUnavailable != null:
+return operatorsUnavailable(_that.message);case CooperativeRecoveryError_Generic() when generic != null:
+return generic(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( BigInt requiredFeeSats,  BigInt requiredFeeRateSatPerVbyte)  replacementFeeTooLow,required TResult Function( String message)  operatorsUnavailable,required TResult Function( String message)  generic,}) {final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow():
+return replacementFeeTooLow(_that.requiredFeeSats,_that.requiredFeeRateSatPerVbyte);case CooperativeRecoveryError_OperatorsUnavailable():
+return operatorsUnavailable(_that.message);case CooperativeRecoveryError_Generic():
+return generic(_that.message);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( BigInt requiredFeeSats,  BigInt requiredFeeRateSatPerVbyte)?  replacementFeeTooLow,TResult? Function( String message)?  operatorsUnavailable,TResult? Function( String message)?  generic,}) {final _that = this;
+switch (_that) {
+case CooperativeRecoveryError_ReplacementFeeTooLow() when replacementFeeTooLow != null:
+return replacementFeeTooLow(_that.requiredFeeSats,_that.requiredFeeRateSatPerVbyte);case CooperativeRecoveryError_OperatorsUnavailable() when operatorsUnavailable != null:
+return operatorsUnavailable(_that.message);case CooperativeRecoveryError_Generic() when generic != null:
+return generic(_that.message);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class CooperativeRecoveryError_ReplacementFeeTooLow extends CooperativeRecoveryError {
+  const CooperativeRecoveryError_ReplacementFeeTooLow({required this.requiredFeeSats, required this.requiredFeeRateSatPerVbyte}): super._();
+  
+
+ final  BigInt requiredFeeSats;
+ final  BigInt requiredFeeRateSatPerVbyte;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CooperativeRecoveryError_ReplacementFeeTooLowCopyWith<CooperativeRecoveryError_ReplacementFeeTooLow> get copyWith => _$CooperativeRecoveryError_ReplacementFeeTooLowCopyWithImpl<CooperativeRecoveryError_ReplacementFeeTooLow>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CooperativeRecoveryError_ReplacementFeeTooLow&&(identical(other.requiredFeeSats, requiredFeeSats) || other.requiredFeeSats == requiredFeeSats)&&(identical(other.requiredFeeRateSatPerVbyte, requiredFeeRateSatPerVbyte) || other.requiredFeeRateSatPerVbyte == requiredFeeRateSatPerVbyte));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,requiredFeeSats,requiredFeeRateSatPerVbyte);
+
+@override
+String toString() {
+  return 'CooperativeRecoveryError.replacementFeeTooLow(requiredFeeSats: $requiredFeeSats, requiredFeeRateSatPerVbyte: $requiredFeeRateSatPerVbyte)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CooperativeRecoveryError_ReplacementFeeTooLowCopyWith<$Res> implements $CooperativeRecoveryErrorCopyWith<$Res> {
+  factory $CooperativeRecoveryError_ReplacementFeeTooLowCopyWith(CooperativeRecoveryError_ReplacementFeeTooLow value, $Res Function(CooperativeRecoveryError_ReplacementFeeTooLow) _then) = _$CooperativeRecoveryError_ReplacementFeeTooLowCopyWithImpl;
+@useResult
+$Res call({
+ BigInt requiredFeeSats, BigInt requiredFeeRateSatPerVbyte
+});
+
+
+
+
+}
+/// @nodoc
+class _$CooperativeRecoveryError_ReplacementFeeTooLowCopyWithImpl<$Res>
+    implements $CooperativeRecoveryError_ReplacementFeeTooLowCopyWith<$Res> {
+  _$CooperativeRecoveryError_ReplacementFeeTooLowCopyWithImpl(this._self, this._then);
+
+  final CooperativeRecoveryError_ReplacementFeeTooLow _self;
+  final $Res Function(CooperativeRecoveryError_ReplacementFeeTooLow) _then;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? requiredFeeSats = null,Object? requiredFeeRateSatPerVbyte = null,}) {
+  return _then(CooperativeRecoveryError_ReplacementFeeTooLow(
+requiredFeeSats: null == requiredFeeSats ? _self.requiredFeeSats : requiredFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt,requiredFeeRateSatPerVbyte: null == requiredFeeRateSatPerVbyte ? _self.requiredFeeRateSatPerVbyte : requiredFeeRateSatPerVbyte // ignore: cast_nullable_to_non_nullable
+as BigInt,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CooperativeRecoveryError_OperatorsUnavailable extends CooperativeRecoveryError {
+  const CooperativeRecoveryError_OperatorsUnavailable({required this.message}): super._();
+  
+
+ final  String message;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CooperativeRecoveryError_OperatorsUnavailableCopyWith<CooperativeRecoveryError_OperatorsUnavailable> get copyWith => _$CooperativeRecoveryError_OperatorsUnavailableCopyWithImpl<CooperativeRecoveryError_OperatorsUnavailable>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CooperativeRecoveryError_OperatorsUnavailable&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'CooperativeRecoveryError.operatorsUnavailable(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CooperativeRecoveryError_OperatorsUnavailableCopyWith<$Res> implements $CooperativeRecoveryErrorCopyWith<$Res> {
+  factory $CooperativeRecoveryError_OperatorsUnavailableCopyWith(CooperativeRecoveryError_OperatorsUnavailable value, $Res Function(CooperativeRecoveryError_OperatorsUnavailable) _then) = _$CooperativeRecoveryError_OperatorsUnavailableCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$CooperativeRecoveryError_OperatorsUnavailableCopyWithImpl<$Res>
+    implements $CooperativeRecoveryError_OperatorsUnavailableCopyWith<$Res> {
+  _$CooperativeRecoveryError_OperatorsUnavailableCopyWithImpl(this._self, this._then);
+
+  final CooperativeRecoveryError_OperatorsUnavailable _self;
+  final $Res Function(CooperativeRecoveryError_OperatorsUnavailable) _then;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(CooperativeRecoveryError_OperatorsUnavailable(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CooperativeRecoveryError_Generic extends CooperativeRecoveryError {
+  const CooperativeRecoveryError_Generic({required this.message}): super._();
+  
+
+ final  String message;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CooperativeRecoveryError_GenericCopyWith<CooperativeRecoveryError_Generic> get copyWith => _$CooperativeRecoveryError_GenericCopyWithImpl<CooperativeRecoveryError_Generic>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CooperativeRecoveryError_Generic&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'CooperativeRecoveryError.generic(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CooperativeRecoveryError_GenericCopyWith<$Res> implements $CooperativeRecoveryErrorCopyWith<$Res> {
+  factory $CooperativeRecoveryError_GenericCopyWith(CooperativeRecoveryError_Generic value, $Res Function(CooperativeRecoveryError_Generic) _then) = _$CooperativeRecoveryError_GenericCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$CooperativeRecoveryError_GenericCopyWithImpl<$Res>
+    implements $CooperativeRecoveryError_GenericCopyWith<$Res> {
+  _$CooperativeRecoveryError_GenericCopyWithImpl(this._self, this._then);
+
+  final CooperativeRecoveryError_Generic _self;
+  final $Res Function(CooperativeRecoveryError_Generic) _then;
+
+/// Create a copy of CooperativeRecoveryError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(CooperativeRecoveryError_Generic(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$DepositClaimError {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DepositClaimError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'DepositClaimError()';
+}
+
+
+}
+
+/// @nodoc
+class $DepositClaimErrorCopyWith<$Res>  {
+$DepositClaimErrorCopyWith(DepositClaimError _, $Res Function(DepositClaimError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [DepositClaimError].
+extension DepositClaimErrorPatterns on DepositClaimError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DepositClaimError_MaxDepositClaimFeeExceeded value)?  maxDepositClaimFeeExceeded,TResult Function( DepositClaimError_MissingUtxo value)?  missingUtxo,TResult Function( DepositClaimError_DepositTooSmall value)?  depositTooSmall,TResult Function( DepositClaimError_Generic value)?  generic,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that);case DepositClaimError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that);case DepositClaimError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that);case DepositClaimError_Generic() when generic != null:
+return generic(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DepositClaimError_MaxDepositClaimFeeExceeded value)  maxDepositClaimFeeExceeded,required TResult Function( DepositClaimError_MissingUtxo value)  missingUtxo,required TResult Function( DepositClaimError_DepositTooSmall value)  depositTooSmall,required TResult Function( DepositClaimError_Generic value)  generic,}){
+final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded():
+return maxDepositClaimFeeExceeded(_that);case DepositClaimError_MissingUtxo():
+return missingUtxo(_that);case DepositClaimError_DepositTooSmall():
+return depositTooSmall(_that);case DepositClaimError_Generic():
+return generic(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DepositClaimError_MaxDepositClaimFeeExceeded value)?  maxDepositClaimFeeExceeded,TResult? Function( DepositClaimError_MissingUtxo value)?  missingUtxo,TResult? Function( DepositClaimError_DepositTooSmall value)?  depositTooSmall,TResult? Function( DepositClaimError_Generic value)?  generic,}){
+final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that);case DepositClaimError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that);case DepositClaimError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that);case DepositClaimError_Generic() when generic != null:
+return generic(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats)?  maxDepositClaimFeeExceeded,TResult Function( String tx,  int vout)?  missingUtxo,TResult Function( String tx,  int vout)?  depositTooSmall,TResult Function( String message)?  generic,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats);case DepositClaimError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that.tx,_that.vout);case DepositClaimError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that.tx,_that.vout);case DepositClaimError_Generic() when generic != null:
+return generic(_that.message);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats)  maxDepositClaimFeeExceeded,required TResult Function( String tx,  int vout)  missingUtxo,required TResult Function( String tx,  int vout)  depositTooSmall,required TResult Function( String message)  generic,}) {final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded():
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats);case DepositClaimError_MissingUtxo():
+return missingUtxo(_that.tx,_that.vout);case DepositClaimError_DepositTooSmall():
+return depositTooSmall(_that.tx,_that.vout);case DepositClaimError_Generic():
+return generic(_that.message);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats)?  maxDepositClaimFeeExceeded,TResult? Function( String tx,  int vout)?  missingUtxo,TResult? Function( String tx,  int vout)?  depositTooSmall,TResult? Function( String message)?  generic,}) {final _that = this;
+switch (_that) {
+case DepositClaimError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats);case DepositClaimError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that.tx,_that.vout);case DepositClaimError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that.tx,_that.vout);case DepositClaimError_Generic() when generic != null:
+return generic(_that.message);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class DepositClaimError_MaxDepositClaimFeeExceeded extends DepositClaimError {
+  const DepositClaimError_MaxDepositClaimFeeExceeded({required this.tx, required this.vout, this.maxFeeSats, required this.requiredFeeSats}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+ final  BigInt? maxFeeSats;
+ final  BigInt requiredFeeSats;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DepositClaimError_MaxDepositClaimFeeExceededCopyWith<DepositClaimError_MaxDepositClaimFeeExceeded> get copyWith => _$DepositClaimError_MaxDepositClaimFeeExceededCopyWithImpl<DepositClaimError_MaxDepositClaimFeeExceeded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DepositClaimError_MaxDepositClaimFeeExceeded&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout)&&(identical(other.maxFeeSats, maxFeeSats) || other.maxFeeSats == maxFeeSats)&&(identical(other.requiredFeeSats, requiredFeeSats) || other.requiredFeeSats == requiredFeeSats));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout,maxFeeSats,requiredFeeSats);
+
+@override
+String toString() {
+  return 'DepositClaimError.maxDepositClaimFeeExceeded(tx: $tx, vout: $vout, maxFeeSats: $maxFeeSats, requiredFeeSats: $requiredFeeSats)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DepositClaimError_MaxDepositClaimFeeExceededCopyWith<$Res> implements $DepositClaimErrorCopyWith<$Res> {
+  factory $DepositClaimError_MaxDepositClaimFeeExceededCopyWith(DepositClaimError_MaxDepositClaimFeeExceeded value, $Res Function(DepositClaimError_MaxDepositClaimFeeExceeded) _then) = _$DepositClaimError_MaxDepositClaimFeeExceededCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout, BigInt? maxFeeSats, BigInt requiredFeeSats
+});
+
+
+
+
+}
+/// @nodoc
+class _$DepositClaimError_MaxDepositClaimFeeExceededCopyWithImpl<$Res>
+    implements $DepositClaimError_MaxDepositClaimFeeExceededCopyWith<$Res> {
+  _$DepositClaimError_MaxDepositClaimFeeExceededCopyWithImpl(this._self, this._then);
+
+  final DepositClaimError_MaxDepositClaimFeeExceeded _self;
+  final $Res Function(DepositClaimError_MaxDepositClaimFeeExceeded) _then;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,Object? maxFeeSats = freezed,Object? requiredFeeSats = null,}) {
+  return _then(DepositClaimError_MaxDepositClaimFeeExceeded(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,maxFeeSats: freezed == maxFeeSats ? _self.maxFeeSats : maxFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt?,requiredFeeSats: null == requiredFeeSats ? _self.requiredFeeSats : requiredFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DepositClaimError_MissingUtxo extends DepositClaimError {
+  const DepositClaimError_MissingUtxo({required this.tx, required this.vout}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DepositClaimError_MissingUtxoCopyWith<DepositClaimError_MissingUtxo> get copyWith => _$DepositClaimError_MissingUtxoCopyWithImpl<DepositClaimError_MissingUtxo>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DepositClaimError_MissingUtxo&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout);
+
+@override
+String toString() {
+  return 'DepositClaimError.missingUtxo(tx: $tx, vout: $vout)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DepositClaimError_MissingUtxoCopyWith<$Res> implements $DepositClaimErrorCopyWith<$Res> {
+  factory $DepositClaimError_MissingUtxoCopyWith(DepositClaimError_MissingUtxo value, $Res Function(DepositClaimError_MissingUtxo) _then) = _$DepositClaimError_MissingUtxoCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout
+});
+
+
+
+
+}
+/// @nodoc
+class _$DepositClaimError_MissingUtxoCopyWithImpl<$Res>
+    implements $DepositClaimError_MissingUtxoCopyWith<$Res> {
+  _$DepositClaimError_MissingUtxoCopyWithImpl(this._self, this._then);
+
+  final DepositClaimError_MissingUtxo _self;
+  final $Res Function(DepositClaimError_MissingUtxo) _then;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,}) {
+  return _then(DepositClaimError_MissingUtxo(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DepositClaimError_DepositTooSmall extends DepositClaimError {
+  const DepositClaimError_DepositTooSmall({required this.tx, required this.vout}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DepositClaimError_DepositTooSmallCopyWith<DepositClaimError_DepositTooSmall> get copyWith => _$DepositClaimError_DepositTooSmallCopyWithImpl<DepositClaimError_DepositTooSmall>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DepositClaimError_DepositTooSmall&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout);
+
+@override
+String toString() {
+  return 'DepositClaimError.depositTooSmall(tx: $tx, vout: $vout)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DepositClaimError_DepositTooSmallCopyWith<$Res> implements $DepositClaimErrorCopyWith<$Res> {
+  factory $DepositClaimError_DepositTooSmallCopyWith(DepositClaimError_DepositTooSmall value, $Res Function(DepositClaimError_DepositTooSmall) _then) = _$DepositClaimError_DepositTooSmallCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout
+});
+
+
+
+
+}
+/// @nodoc
+class _$DepositClaimError_DepositTooSmallCopyWithImpl<$Res>
+    implements $DepositClaimError_DepositTooSmallCopyWith<$Res> {
+  _$DepositClaimError_DepositTooSmallCopyWithImpl(this._self, this._then);
+
+  final DepositClaimError_DepositTooSmall _self;
+  final $Res Function(DepositClaimError_DepositTooSmall) _then;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,}) {
+  return _then(DepositClaimError_DepositTooSmall(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DepositClaimError_Generic extends DepositClaimError {
+  const DepositClaimError_Generic({required this.message}): super._();
+  
+
+ final  String message;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DepositClaimError_GenericCopyWith<DepositClaimError_Generic> get copyWith => _$DepositClaimError_GenericCopyWithImpl<DepositClaimError_Generic>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DepositClaimError_Generic&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'DepositClaimError.generic(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DepositClaimError_GenericCopyWith<$Res> implements $DepositClaimErrorCopyWith<$Res> {
+  factory $DepositClaimError_GenericCopyWith(DepositClaimError_Generic value, $Res Function(DepositClaimError_Generic) _then) = _$DepositClaimError_GenericCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$DepositClaimError_GenericCopyWithImpl<$Res>
+    implements $DepositClaimError_GenericCopyWith<$Res> {
+  _$DepositClaimError_GenericCopyWithImpl(this._self, this._then);
+
+  final DepositClaimError_Generic _self;
+  final $Res Function(DepositClaimError_Generic) _then;
+
+/// Create a copy of DepositClaimError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(DepositClaimError_Generic(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$PasskeyError {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PasskeyError()';
+}
+
+
+}
+
+/// @nodoc
+class $PasskeyErrorCopyWith<$Res>  {
+$PasskeyErrorCopyWith(PasskeyError _, $Res Function(PasskeyError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [PasskeyError].
+extension PasskeyErrorPatterns on PasskeyError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( PasskeyError_Prf value)?  prf,TResult Function( PasskeyError_RelayConnectionFailed value)?  relayConnectionFailed,TResult Function( PasskeyError_NostrWriteFailed value)?  nostrWriteFailed,TResult Function( PasskeyError_NostrReadFailed value)?  nostrReadFailed,TResult Function( PasskeyError_KeyDerivationError value)?  keyDerivationError,TResult Function( PasskeyError_InvalidPrfOutput value)?  invalidPrfOutput,TResult Function( PasskeyError_MnemonicError value)?  mnemonicError,TResult Function( PasskeyError_InvalidSalt value)?  invalidSalt,TResult Function( PasskeyError_CreatedButNotDerived value)?  createdButNotDerived,TResult Function( PasskeyError_InvalidConfig value)?  invalidConfig,TResult Function( PasskeyError_Generic value)?  generic,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case PasskeyError_Prf() when prf != null:
+return prf(_that);case PasskeyError_RelayConnectionFailed() when relayConnectionFailed != null:
+return relayConnectionFailed(_that);case PasskeyError_NostrWriteFailed() when nostrWriteFailed != null:
+return nostrWriteFailed(_that);case PasskeyError_NostrReadFailed() when nostrReadFailed != null:
+return nostrReadFailed(_that);case PasskeyError_KeyDerivationError() when keyDerivationError != null:
+return keyDerivationError(_that);case PasskeyError_InvalidPrfOutput() when invalidPrfOutput != null:
+return invalidPrfOutput(_that);case PasskeyError_MnemonicError() when mnemonicError != null:
+return mnemonicError(_that);case PasskeyError_InvalidSalt() when invalidSalt != null:
+return invalidSalt(_that);case PasskeyError_CreatedButNotDerived() when createdButNotDerived != null:
+return createdButNotDerived(_that);case PasskeyError_InvalidConfig() when invalidConfig != null:
+return invalidConfig(_that);case PasskeyError_Generic() when generic != null:
+return generic(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( PasskeyError_Prf value)  prf,required TResult Function( PasskeyError_RelayConnectionFailed value)  relayConnectionFailed,required TResult Function( PasskeyError_NostrWriteFailed value)  nostrWriteFailed,required TResult Function( PasskeyError_NostrReadFailed value)  nostrReadFailed,required TResult Function( PasskeyError_KeyDerivationError value)  keyDerivationError,required TResult Function( PasskeyError_InvalidPrfOutput value)  invalidPrfOutput,required TResult Function( PasskeyError_MnemonicError value)  mnemonicError,required TResult Function( PasskeyError_InvalidSalt value)  invalidSalt,required TResult Function( PasskeyError_CreatedButNotDerived value)  createdButNotDerived,required TResult Function( PasskeyError_InvalidConfig value)  invalidConfig,required TResult Function( PasskeyError_Generic value)  generic,}){
+final _that = this;
+switch (_that) {
+case PasskeyError_Prf():
+return prf(_that);case PasskeyError_RelayConnectionFailed():
+return relayConnectionFailed(_that);case PasskeyError_NostrWriteFailed():
+return nostrWriteFailed(_that);case PasskeyError_NostrReadFailed():
+return nostrReadFailed(_that);case PasskeyError_KeyDerivationError():
+return keyDerivationError(_that);case PasskeyError_InvalidPrfOutput():
+return invalidPrfOutput(_that);case PasskeyError_MnemonicError():
+return mnemonicError(_that);case PasskeyError_InvalidSalt():
+return invalidSalt(_that);case PasskeyError_CreatedButNotDerived():
+return createdButNotDerived(_that);case PasskeyError_InvalidConfig():
+return invalidConfig(_that);case PasskeyError_Generic():
+return generic(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( PasskeyError_Prf value)?  prf,TResult? Function( PasskeyError_RelayConnectionFailed value)?  relayConnectionFailed,TResult? Function( PasskeyError_NostrWriteFailed value)?  nostrWriteFailed,TResult? Function( PasskeyError_NostrReadFailed value)?  nostrReadFailed,TResult? Function( PasskeyError_KeyDerivationError value)?  keyDerivationError,TResult? Function( PasskeyError_InvalidPrfOutput value)?  invalidPrfOutput,TResult? Function( PasskeyError_MnemonicError value)?  mnemonicError,TResult? Function( PasskeyError_InvalidSalt value)?  invalidSalt,TResult? Function( PasskeyError_CreatedButNotDerived value)?  createdButNotDerived,TResult? Function( PasskeyError_InvalidConfig value)?  invalidConfig,TResult? Function( PasskeyError_Generic value)?  generic,}){
+final _that = this;
+switch (_that) {
+case PasskeyError_Prf() when prf != null:
+return prf(_that);case PasskeyError_RelayConnectionFailed() when relayConnectionFailed != null:
+return relayConnectionFailed(_that);case PasskeyError_NostrWriteFailed() when nostrWriteFailed != null:
+return nostrWriteFailed(_that);case PasskeyError_NostrReadFailed() when nostrReadFailed != null:
+return nostrReadFailed(_that);case PasskeyError_KeyDerivationError() when keyDerivationError != null:
+return keyDerivationError(_that);case PasskeyError_InvalidPrfOutput() when invalidPrfOutput != null:
+return invalidPrfOutput(_that);case PasskeyError_MnemonicError() when mnemonicError != null:
+return mnemonicError(_that);case PasskeyError_InvalidSalt() when invalidSalt != null:
+return invalidSalt(_that);case PasskeyError_CreatedButNotDerived() when createdButNotDerived != null:
+return createdButNotDerived(_that);case PasskeyError_InvalidConfig() when invalidConfig != null:
+return invalidConfig(_that);case PasskeyError_Generic() when generic != null:
+return generic(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( PrfProviderError field0)?  prf,TResult Function( String field0)?  relayConnectionFailed,TResult Function( String field0)?  nostrWriteFailed,TResult Function( String field0)?  nostrReadFailed,TResult Function( String field0)?  keyDerivationError,TResult Function( String field0)?  invalidPrfOutput,TResult Function( String field0)?  mnemonicError,TResult Function( String field0)?  invalidSalt,TResult Function( Uint8List credentialId,  PrfProviderError source)?  createdButNotDerived,TResult Function( String field0)?  invalidConfig,TResult Function( String field0)?  generic,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case PasskeyError_Prf() when prf != null:
+return prf(_that.field0);case PasskeyError_RelayConnectionFailed() when relayConnectionFailed != null:
+return relayConnectionFailed(_that.field0);case PasskeyError_NostrWriteFailed() when nostrWriteFailed != null:
+return nostrWriteFailed(_that.field0);case PasskeyError_NostrReadFailed() when nostrReadFailed != null:
+return nostrReadFailed(_that.field0);case PasskeyError_KeyDerivationError() when keyDerivationError != null:
+return keyDerivationError(_that.field0);case PasskeyError_InvalidPrfOutput() when invalidPrfOutput != null:
+return invalidPrfOutput(_that.field0);case PasskeyError_MnemonicError() when mnemonicError != null:
+return mnemonicError(_that.field0);case PasskeyError_InvalidSalt() when invalidSalt != null:
+return invalidSalt(_that.field0);case PasskeyError_CreatedButNotDerived() when createdButNotDerived != null:
+return createdButNotDerived(_that.credentialId,_that.source);case PasskeyError_InvalidConfig() when invalidConfig != null:
+return invalidConfig(_that.field0);case PasskeyError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( PrfProviderError field0)  prf,required TResult Function( String field0)  relayConnectionFailed,required TResult Function( String field0)  nostrWriteFailed,required TResult Function( String field0)  nostrReadFailed,required TResult Function( String field0)  keyDerivationError,required TResult Function( String field0)  invalidPrfOutput,required TResult Function( String field0)  mnemonicError,required TResult Function( String field0)  invalidSalt,required TResult Function( Uint8List credentialId,  PrfProviderError source)  createdButNotDerived,required TResult Function( String field0)  invalidConfig,required TResult Function( String field0)  generic,}) {final _that = this;
+switch (_that) {
+case PasskeyError_Prf():
+return prf(_that.field0);case PasskeyError_RelayConnectionFailed():
+return relayConnectionFailed(_that.field0);case PasskeyError_NostrWriteFailed():
+return nostrWriteFailed(_that.field0);case PasskeyError_NostrReadFailed():
+return nostrReadFailed(_that.field0);case PasskeyError_KeyDerivationError():
+return keyDerivationError(_that.field0);case PasskeyError_InvalidPrfOutput():
+return invalidPrfOutput(_that.field0);case PasskeyError_MnemonicError():
+return mnemonicError(_that.field0);case PasskeyError_InvalidSalt():
+return invalidSalt(_that.field0);case PasskeyError_CreatedButNotDerived():
+return createdButNotDerived(_that.credentialId,_that.source);case PasskeyError_InvalidConfig():
+return invalidConfig(_that.field0);case PasskeyError_Generic():
+return generic(_that.field0);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( PrfProviderError field0)?  prf,TResult? Function( String field0)?  relayConnectionFailed,TResult? Function( String field0)?  nostrWriteFailed,TResult? Function( String field0)?  nostrReadFailed,TResult? Function( String field0)?  keyDerivationError,TResult? Function( String field0)?  invalidPrfOutput,TResult? Function( String field0)?  mnemonicError,TResult? Function( String field0)?  invalidSalt,TResult? Function( Uint8List credentialId,  PrfProviderError source)?  createdButNotDerived,TResult? Function( String field0)?  invalidConfig,TResult? Function( String field0)?  generic,}) {final _that = this;
+switch (_that) {
+case PasskeyError_Prf() when prf != null:
+return prf(_that.field0);case PasskeyError_RelayConnectionFailed() when relayConnectionFailed != null:
+return relayConnectionFailed(_that.field0);case PasskeyError_NostrWriteFailed() when nostrWriteFailed != null:
+return nostrWriteFailed(_that.field0);case PasskeyError_NostrReadFailed() when nostrReadFailed != null:
+return nostrReadFailed(_that.field0);case PasskeyError_KeyDerivationError() when keyDerivationError != null:
+return keyDerivationError(_that.field0);case PasskeyError_InvalidPrfOutput() when invalidPrfOutput != null:
+return invalidPrfOutput(_that.field0);case PasskeyError_MnemonicError() when mnemonicError != null:
+return mnemonicError(_that.field0);case PasskeyError_InvalidSalt() when invalidSalt != null:
+return invalidSalt(_that.field0);case PasskeyError_CreatedButNotDerived() when createdButNotDerived != null:
+return createdButNotDerived(_that.credentialId,_that.source);case PasskeyError_InvalidConfig() when invalidConfig != null:
+return invalidConfig(_that.field0);case PasskeyError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_Prf extends PasskeyError {
+  const PasskeyError_Prf(this.field0): super._();
+  
+
+ final  PrfProviderError field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_PrfCopyWith<PasskeyError_Prf> get copyWith => _$PasskeyError_PrfCopyWithImpl<PasskeyError_Prf>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_Prf&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.prf(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_PrfCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_PrfCopyWith(PasskeyError_Prf value, $Res Function(PasskeyError_Prf) _then) = _$PasskeyError_PrfCopyWithImpl;
+@useResult
+$Res call({
+ PrfProviderError field0
+});
+
+
+$PrfProviderErrorCopyWith<$Res> get field0;
+
+}
+/// @nodoc
+class _$PasskeyError_PrfCopyWithImpl<$Res>
+    implements $PasskeyError_PrfCopyWith<$Res> {
+  _$PasskeyError_PrfCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_Prf _self;
+  final $Res Function(PasskeyError_Prf) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_Prf(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as PrfProviderError,
+  ));
+}
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PrfProviderErrorCopyWith<$Res> get field0 {
+  
+  return $PrfProviderErrorCopyWith<$Res>(_self.field0, (value) {
+    return _then(_self.copyWith(field0: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class PasskeyError_RelayConnectionFailed extends PasskeyError {
+  const PasskeyError_RelayConnectionFailed(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_RelayConnectionFailedCopyWith<PasskeyError_RelayConnectionFailed> get copyWith => _$PasskeyError_RelayConnectionFailedCopyWithImpl<PasskeyError_RelayConnectionFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_RelayConnectionFailed&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.relayConnectionFailed(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_RelayConnectionFailedCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_RelayConnectionFailedCopyWith(PasskeyError_RelayConnectionFailed value, $Res Function(PasskeyError_RelayConnectionFailed) _then) = _$PasskeyError_RelayConnectionFailedCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_RelayConnectionFailedCopyWithImpl<$Res>
+    implements $PasskeyError_RelayConnectionFailedCopyWith<$Res> {
+  _$PasskeyError_RelayConnectionFailedCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_RelayConnectionFailed _self;
+  final $Res Function(PasskeyError_RelayConnectionFailed) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_RelayConnectionFailed(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_NostrWriteFailed extends PasskeyError {
+  const PasskeyError_NostrWriteFailed(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_NostrWriteFailedCopyWith<PasskeyError_NostrWriteFailed> get copyWith => _$PasskeyError_NostrWriteFailedCopyWithImpl<PasskeyError_NostrWriteFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_NostrWriteFailed&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.nostrWriteFailed(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_NostrWriteFailedCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_NostrWriteFailedCopyWith(PasskeyError_NostrWriteFailed value, $Res Function(PasskeyError_NostrWriteFailed) _then) = _$PasskeyError_NostrWriteFailedCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_NostrWriteFailedCopyWithImpl<$Res>
+    implements $PasskeyError_NostrWriteFailedCopyWith<$Res> {
+  _$PasskeyError_NostrWriteFailedCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_NostrWriteFailed _self;
+  final $Res Function(PasskeyError_NostrWriteFailed) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_NostrWriteFailed(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_NostrReadFailed extends PasskeyError {
+  const PasskeyError_NostrReadFailed(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_NostrReadFailedCopyWith<PasskeyError_NostrReadFailed> get copyWith => _$PasskeyError_NostrReadFailedCopyWithImpl<PasskeyError_NostrReadFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_NostrReadFailed&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.nostrReadFailed(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_NostrReadFailedCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_NostrReadFailedCopyWith(PasskeyError_NostrReadFailed value, $Res Function(PasskeyError_NostrReadFailed) _then) = _$PasskeyError_NostrReadFailedCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_NostrReadFailedCopyWithImpl<$Res>
+    implements $PasskeyError_NostrReadFailedCopyWith<$Res> {
+  _$PasskeyError_NostrReadFailedCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_NostrReadFailed _self;
+  final $Res Function(PasskeyError_NostrReadFailed) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_NostrReadFailed(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_KeyDerivationError extends PasskeyError {
+  const PasskeyError_KeyDerivationError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_KeyDerivationErrorCopyWith<PasskeyError_KeyDerivationError> get copyWith => _$PasskeyError_KeyDerivationErrorCopyWithImpl<PasskeyError_KeyDerivationError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_KeyDerivationError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.keyDerivationError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_KeyDerivationErrorCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_KeyDerivationErrorCopyWith(PasskeyError_KeyDerivationError value, $Res Function(PasskeyError_KeyDerivationError) _then) = _$PasskeyError_KeyDerivationErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_KeyDerivationErrorCopyWithImpl<$Res>
+    implements $PasskeyError_KeyDerivationErrorCopyWith<$Res> {
+  _$PasskeyError_KeyDerivationErrorCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_KeyDerivationError _self;
+  final $Res Function(PasskeyError_KeyDerivationError) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_KeyDerivationError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_InvalidPrfOutput extends PasskeyError {
+  const PasskeyError_InvalidPrfOutput(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_InvalidPrfOutputCopyWith<PasskeyError_InvalidPrfOutput> get copyWith => _$PasskeyError_InvalidPrfOutputCopyWithImpl<PasskeyError_InvalidPrfOutput>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_InvalidPrfOutput&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.invalidPrfOutput(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_InvalidPrfOutputCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_InvalidPrfOutputCopyWith(PasskeyError_InvalidPrfOutput value, $Res Function(PasskeyError_InvalidPrfOutput) _then) = _$PasskeyError_InvalidPrfOutputCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_InvalidPrfOutputCopyWithImpl<$Res>
+    implements $PasskeyError_InvalidPrfOutputCopyWith<$Res> {
+  _$PasskeyError_InvalidPrfOutputCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_InvalidPrfOutput _self;
+  final $Res Function(PasskeyError_InvalidPrfOutput) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_InvalidPrfOutput(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_MnemonicError extends PasskeyError {
+  const PasskeyError_MnemonicError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_MnemonicErrorCopyWith<PasskeyError_MnemonicError> get copyWith => _$PasskeyError_MnemonicErrorCopyWithImpl<PasskeyError_MnemonicError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_MnemonicError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.mnemonicError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_MnemonicErrorCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_MnemonicErrorCopyWith(PasskeyError_MnemonicError value, $Res Function(PasskeyError_MnemonicError) _then) = _$PasskeyError_MnemonicErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_MnemonicErrorCopyWithImpl<$Res>
+    implements $PasskeyError_MnemonicErrorCopyWith<$Res> {
+  _$PasskeyError_MnemonicErrorCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_MnemonicError _self;
+  final $Res Function(PasskeyError_MnemonicError) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_MnemonicError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_InvalidSalt extends PasskeyError {
+  const PasskeyError_InvalidSalt(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_InvalidSaltCopyWith<PasskeyError_InvalidSalt> get copyWith => _$PasskeyError_InvalidSaltCopyWithImpl<PasskeyError_InvalidSalt>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_InvalidSalt&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.invalidSalt(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_InvalidSaltCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_InvalidSaltCopyWith(PasskeyError_InvalidSalt value, $Res Function(PasskeyError_InvalidSalt) _then) = _$PasskeyError_InvalidSaltCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_InvalidSaltCopyWithImpl<$Res>
+    implements $PasskeyError_InvalidSaltCopyWith<$Res> {
+  _$PasskeyError_InvalidSaltCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_InvalidSalt _self;
+  final $Res Function(PasskeyError_InvalidSalt) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_InvalidSalt(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_CreatedButNotDerived extends PasskeyError {
+  const PasskeyError_CreatedButNotDerived({required this.credentialId, required this.source}): super._();
+  
+
+ final  Uint8List credentialId;
+ final  PrfProviderError source;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_CreatedButNotDerivedCopyWith<PasskeyError_CreatedButNotDerived> get copyWith => _$PasskeyError_CreatedButNotDerivedCopyWithImpl<PasskeyError_CreatedButNotDerived>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_CreatedButNotDerived&&const DeepCollectionEquality().equals(other.credentialId, credentialId)&&(identical(other.source, source) || other.source == source));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(credentialId),source);
+
+@override
+String toString() {
+  return 'PasskeyError.createdButNotDerived(credentialId: $credentialId, source: $source)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_CreatedButNotDerivedCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_CreatedButNotDerivedCopyWith(PasskeyError_CreatedButNotDerived value, $Res Function(PasskeyError_CreatedButNotDerived) _then) = _$PasskeyError_CreatedButNotDerivedCopyWithImpl;
+@useResult
+$Res call({
+ Uint8List credentialId, PrfProviderError source
+});
+
+
+$PrfProviderErrorCopyWith<$Res> get source;
+
+}
+/// @nodoc
+class _$PasskeyError_CreatedButNotDerivedCopyWithImpl<$Res>
+    implements $PasskeyError_CreatedButNotDerivedCopyWith<$Res> {
+  _$PasskeyError_CreatedButNotDerivedCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_CreatedButNotDerived _self;
+  final $Res Function(PasskeyError_CreatedButNotDerived) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? credentialId = null,Object? source = null,}) {
+  return _then(PasskeyError_CreatedButNotDerived(
+credentialId: null == credentialId ? _self.credentialId : credentialId // ignore: cast_nullable_to_non_nullable
+as Uint8List,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as PrfProviderError,
+  ));
+}
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$PrfProviderErrorCopyWith<$Res> get source {
+  
+  return $PrfProviderErrorCopyWith<$Res>(_self.source, (value) {
+    return _then(_self.copyWith(source: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class PasskeyError_InvalidConfig extends PasskeyError {
+  const PasskeyError_InvalidConfig(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_InvalidConfigCopyWith<PasskeyError_InvalidConfig> get copyWith => _$PasskeyError_InvalidConfigCopyWithImpl<PasskeyError_InvalidConfig>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_InvalidConfig&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.invalidConfig(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_InvalidConfigCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_InvalidConfigCopyWith(PasskeyError_InvalidConfig value, $Res Function(PasskeyError_InvalidConfig) _then) = _$PasskeyError_InvalidConfigCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_InvalidConfigCopyWithImpl<$Res>
+    implements $PasskeyError_InvalidConfigCopyWith<$Res> {
+  _$PasskeyError_InvalidConfigCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_InvalidConfig _self;
+  final $Res Function(PasskeyError_InvalidConfig) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_InvalidConfig(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PasskeyError_Generic extends PasskeyError {
+  const PasskeyError_Generic(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PasskeyError_GenericCopyWith<PasskeyError_Generic> get copyWith => _$PasskeyError_GenericCopyWithImpl<PasskeyError_Generic>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PasskeyError_Generic&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PasskeyError.generic(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PasskeyError_GenericCopyWith<$Res> implements $PasskeyErrorCopyWith<$Res> {
+  factory $PasskeyError_GenericCopyWith(PasskeyError_Generic value, $Res Function(PasskeyError_Generic) _then) = _$PasskeyError_GenericCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PasskeyError_GenericCopyWithImpl<$Res>
+    implements $PasskeyError_GenericCopyWith<$Res> {
+  _$PasskeyError_GenericCopyWithImpl(this._self, this._then);
+
+  final PasskeyError_Generic _self;
+  final $Res Function(PasskeyError_Generic) _then;
+
+/// Create a copy of PasskeyError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PasskeyError_Generic(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$PrfProviderError {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PrfProviderError()';
+}
+
+
+}
+
+/// @nodoc
+class $PrfProviderErrorCopyWith<$Res>  {
+$PrfProviderErrorCopyWith(PrfProviderError _, $Res Function(PrfProviderError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [PrfProviderError].
+extension PrfProviderErrorPatterns on PrfProviderError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( PrfProviderError_PrfNotSupported value)?  prfNotSupported,TResult Function( PrfProviderError_UserCancelled value)?  userCancelled,TResult Function( PrfProviderError_UserTimedOut value)?  userTimedOut,TResult Function( PrfProviderError_CredentialNotFound value)?  credentialNotFound,TResult Function( PrfProviderError_AuthenticationFailed value)?  authenticationFailed,TResult Function( PrfProviderError_PrfEvaluationFailed value)?  prfEvaluationFailed,TResult Function( PrfProviderError_Configuration value)?  configuration,TResult Function( PrfProviderError_CredentialAlreadyExists value)?  credentialAlreadyExists,TResult Function( PrfProviderError_Generic value)?  generic,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported() when prfNotSupported != null:
+return prfNotSupported(_that);case PrfProviderError_UserCancelled() when userCancelled != null:
+return userCancelled(_that);case PrfProviderError_UserTimedOut() when userTimedOut != null:
+return userTimedOut(_that);case PrfProviderError_CredentialNotFound() when credentialNotFound != null:
+return credentialNotFound(_that);case PrfProviderError_AuthenticationFailed() when authenticationFailed != null:
+return authenticationFailed(_that);case PrfProviderError_PrfEvaluationFailed() when prfEvaluationFailed != null:
+return prfEvaluationFailed(_that);case PrfProviderError_Configuration() when configuration != null:
+return configuration(_that);case PrfProviderError_CredentialAlreadyExists() when credentialAlreadyExists != null:
+return credentialAlreadyExists(_that);case PrfProviderError_Generic() when generic != null:
+return generic(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( PrfProviderError_PrfNotSupported value)  prfNotSupported,required TResult Function( PrfProviderError_UserCancelled value)  userCancelled,required TResult Function( PrfProviderError_UserTimedOut value)  userTimedOut,required TResult Function( PrfProviderError_CredentialNotFound value)  credentialNotFound,required TResult Function( PrfProviderError_AuthenticationFailed value)  authenticationFailed,required TResult Function( PrfProviderError_PrfEvaluationFailed value)  prfEvaluationFailed,required TResult Function( PrfProviderError_Configuration value)  configuration,required TResult Function( PrfProviderError_CredentialAlreadyExists value)  credentialAlreadyExists,required TResult Function( PrfProviderError_Generic value)  generic,}){
+final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported():
+return prfNotSupported(_that);case PrfProviderError_UserCancelled():
+return userCancelled(_that);case PrfProviderError_UserTimedOut():
+return userTimedOut(_that);case PrfProviderError_CredentialNotFound():
+return credentialNotFound(_that);case PrfProviderError_AuthenticationFailed():
+return authenticationFailed(_that);case PrfProviderError_PrfEvaluationFailed():
+return prfEvaluationFailed(_that);case PrfProviderError_Configuration():
+return configuration(_that);case PrfProviderError_CredentialAlreadyExists():
+return credentialAlreadyExists(_that);case PrfProviderError_Generic():
+return generic(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( PrfProviderError_PrfNotSupported value)?  prfNotSupported,TResult? Function( PrfProviderError_UserCancelled value)?  userCancelled,TResult? Function( PrfProviderError_UserTimedOut value)?  userTimedOut,TResult? Function( PrfProviderError_CredentialNotFound value)?  credentialNotFound,TResult? Function( PrfProviderError_AuthenticationFailed value)?  authenticationFailed,TResult? Function( PrfProviderError_PrfEvaluationFailed value)?  prfEvaluationFailed,TResult? Function( PrfProviderError_Configuration value)?  configuration,TResult? Function( PrfProviderError_CredentialAlreadyExists value)?  credentialAlreadyExists,TResult? Function( PrfProviderError_Generic value)?  generic,}){
+final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported() when prfNotSupported != null:
+return prfNotSupported(_that);case PrfProviderError_UserCancelled() when userCancelled != null:
+return userCancelled(_that);case PrfProviderError_UserTimedOut() when userTimedOut != null:
+return userTimedOut(_that);case PrfProviderError_CredentialNotFound() when credentialNotFound != null:
+return credentialNotFound(_that);case PrfProviderError_AuthenticationFailed() when authenticationFailed != null:
+return authenticationFailed(_that);case PrfProviderError_PrfEvaluationFailed() when prfEvaluationFailed != null:
+return prfEvaluationFailed(_that);case PrfProviderError_Configuration() when configuration != null:
+return configuration(_that);case PrfProviderError_CredentialAlreadyExists() when credentialAlreadyExists != null:
+return credentialAlreadyExists(_that);case PrfProviderError_Generic() when generic != null:
+return generic(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  prfNotSupported,TResult Function()?  userCancelled,TResult Function()?  userTimedOut,TResult Function( String field0)?  credentialNotFound,TResult Function( String field0)?  authenticationFailed,TResult Function( String field0)?  prfEvaluationFailed,TResult Function( String field0)?  configuration,TResult Function( String field0)?  credentialAlreadyExists,TResult Function( String field0)?  generic,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported() when prfNotSupported != null:
+return prfNotSupported();case PrfProviderError_UserCancelled() when userCancelled != null:
+return userCancelled();case PrfProviderError_UserTimedOut() when userTimedOut != null:
+return userTimedOut();case PrfProviderError_CredentialNotFound() when credentialNotFound != null:
+return credentialNotFound(_that.field0);case PrfProviderError_AuthenticationFailed() when authenticationFailed != null:
+return authenticationFailed(_that.field0);case PrfProviderError_PrfEvaluationFailed() when prfEvaluationFailed != null:
+return prfEvaluationFailed(_that.field0);case PrfProviderError_Configuration() when configuration != null:
+return configuration(_that.field0);case PrfProviderError_CredentialAlreadyExists() when credentialAlreadyExists != null:
+return credentialAlreadyExists(_that.field0);case PrfProviderError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  prfNotSupported,required TResult Function()  userCancelled,required TResult Function()  userTimedOut,required TResult Function( String field0)  credentialNotFound,required TResult Function( String field0)  authenticationFailed,required TResult Function( String field0)  prfEvaluationFailed,required TResult Function( String field0)  configuration,required TResult Function( String field0)  credentialAlreadyExists,required TResult Function( String field0)  generic,}) {final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported():
+return prfNotSupported();case PrfProviderError_UserCancelled():
+return userCancelled();case PrfProviderError_UserTimedOut():
+return userTimedOut();case PrfProviderError_CredentialNotFound():
+return credentialNotFound(_that.field0);case PrfProviderError_AuthenticationFailed():
+return authenticationFailed(_that.field0);case PrfProviderError_PrfEvaluationFailed():
+return prfEvaluationFailed(_that.field0);case PrfProviderError_Configuration():
+return configuration(_that.field0);case PrfProviderError_CredentialAlreadyExists():
+return credentialAlreadyExists(_that.field0);case PrfProviderError_Generic():
+return generic(_that.field0);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  prfNotSupported,TResult? Function()?  userCancelled,TResult? Function()?  userTimedOut,TResult? Function( String field0)?  credentialNotFound,TResult? Function( String field0)?  authenticationFailed,TResult? Function( String field0)?  prfEvaluationFailed,TResult? Function( String field0)?  configuration,TResult? Function( String field0)?  credentialAlreadyExists,TResult? Function( String field0)?  generic,}) {final _that = this;
+switch (_that) {
+case PrfProviderError_PrfNotSupported() when prfNotSupported != null:
+return prfNotSupported();case PrfProviderError_UserCancelled() when userCancelled != null:
+return userCancelled();case PrfProviderError_UserTimedOut() when userTimedOut != null:
+return userTimedOut();case PrfProviderError_CredentialNotFound() when credentialNotFound != null:
+return credentialNotFound(_that.field0);case PrfProviderError_AuthenticationFailed() when authenticationFailed != null:
+return authenticationFailed(_that.field0);case PrfProviderError_PrfEvaluationFailed() when prfEvaluationFailed != null:
+return prfEvaluationFailed(_that.field0);case PrfProviderError_Configuration() when configuration != null:
+return configuration(_that.field0);case PrfProviderError_CredentialAlreadyExists() when credentialAlreadyExists != null:
+return credentialAlreadyExists(_that.field0);case PrfProviderError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_PrfNotSupported extends PrfProviderError {
+  const PrfProviderError_PrfNotSupported(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_PrfNotSupported);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PrfProviderError.prfNotSupported()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class PrfProviderError_UserCancelled extends PrfProviderError {
+  const PrfProviderError_UserCancelled(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_UserCancelled);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PrfProviderError.userCancelled()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class PrfProviderError_UserTimedOut extends PrfProviderError {
+  const PrfProviderError_UserTimedOut(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_UserTimedOut);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'PrfProviderError.userTimedOut()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class PrfProviderError_CredentialNotFound extends PrfProviderError {
+  const PrfProviderError_CredentialNotFound(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_CredentialNotFoundCopyWith<PrfProviderError_CredentialNotFound> get copyWith => _$PrfProviderError_CredentialNotFoundCopyWithImpl<PrfProviderError_CredentialNotFound>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_CredentialNotFound&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.credentialNotFound(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_CredentialNotFoundCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_CredentialNotFoundCopyWith(PrfProviderError_CredentialNotFound value, $Res Function(PrfProviderError_CredentialNotFound) _then) = _$PrfProviderError_CredentialNotFoundCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_CredentialNotFoundCopyWithImpl<$Res>
+    implements $PrfProviderError_CredentialNotFoundCopyWith<$Res> {
+  _$PrfProviderError_CredentialNotFoundCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_CredentialNotFound _self;
+  final $Res Function(PrfProviderError_CredentialNotFound) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_CredentialNotFound(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_AuthenticationFailed extends PrfProviderError {
+  const PrfProviderError_AuthenticationFailed(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_AuthenticationFailedCopyWith<PrfProviderError_AuthenticationFailed> get copyWith => _$PrfProviderError_AuthenticationFailedCopyWithImpl<PrfProviderError_AuthenticationFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_AuthenticationFailed&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.authenticationFailed(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_AuthenticationFailedCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_AuthenticationFailedCopyWith(PrfProviderError_AuthenticationFailed value, $Res Function(PrfProviderError_AuthenticationFailed) _then) = _$PrfProviderError_AuthenticationFailedCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_AuthenticationFailedCopyWithImpl<$Res>
+    implements $PrfProviderError_AuthenticationFailedCopyWith<$Res> {
+  _$PrfProviderError_AuthenticationFailedCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_AuthenticationFailed _self;
+  final $Res Function(PrfProviderError_AuthenticationFailed) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_AuthenticationFailed(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_PrfEvaluationFailed extends PrfProviderError {
+  const PrfProviderError_PrfEvaluationFailed(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_PrfEvaluationFailedCopyWith<PrfProviderError_PrfEvaluationFailed> get copyWith => _$PrfProviderError_PrfEvaluationFailedCopyWithImpl<PrfProviderError_PrfEvaluationFailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_PrfEvaluationFailed&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.prfEvaluationFailed(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_PrfEvaluationFailedCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_PrfEvaluationFailedCopyWith(PrfProviderError_PrfEvaluationFailed value, $Res Function(PrfProviderError_PrfEvaluationFailed) _then) = _$PrfProviderError_PrfEvaluationFailedCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_PrfEvaluationFailedCopyWithImpl<$Res>
+    implements $PrfProviderError_PrfEvaluationFailedCopyWith<$Res> {
+  _$PrfProviderError_PrfEvaluationFailedCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_PrfEvaluationFailed _self;
+  final $Res Function(PrfProviderError_PrfEvaluationFailed) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_PrfEvaluationFailed(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_Configuration extends PrfProviderError {
+  const PrfProviderError_Configuration(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_ConfigurationCopyWith<PrfProviderError_Configuration> get copyWith => _$PrfProviderError_ConfigurationCopyWithImpl<PrfProviderError_Configuration>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_Configuration&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.configuration(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_ConfigurationCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_ConfigurationCopyWith(PrfProviderError_Configuration value, $Res Function(PrfProviderError_Configuration) _then) = _$PrfProviderError_ConfigurationCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_ConfigurationCopyWithImpl<$Res>
+    implements $PrfProviderError_ConfigurationCopyWith<$Res> {
+  _$PrfProviderError_ConfigurationCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_Configuration _self;
+  final $Res Function(PrfProviderError_Configuration) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_Configuration(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_CredentialAlreadyExists extends PrfProviderError {
+  const PrfProviderError_CredentialAlreadyExists(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_CredentialAlreadyExistsCopyWith<PrfProviderError_CredentialAlreadyExists> get copyWith => _$PrfProviderError_CredentialAlreadyExistsCopyWithImpl<PrfProviderError_CredentialAlreadyExists>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_CredentialAlreadyExists&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.credentialAlreadyExists(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_CredentialAlreadyExistsCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_CredentialAlreadyExistsCopyWith(PrfProviderError_CredentialAlreadyExists value, $Res Function(PrfProviderError_CredentialAlreadyExists) _then) = _$PrfProviderError_CredentialAlreadyExistsCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_CredentialAlreadyExistsCopyWithImpl<$Res>
+    implements $PrfProviderError_CredentialAlreadyExistsCopyWith<$Res> {
+  _$PrfProviderError_CredentialAlreadyExistsCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_CredentialAlreadyExists _self;
+  final $Res Function(PrfProviderError_CredentialAlreadyExists) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_CredentialAlreadyExists(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class PrfProviderError_Generic extends PrfProviderError {
+  const PrfProviderError_Generic(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PrfProviderError_GenericCopyWith<PrfProviderError_Generic> get copyWith => _$PrfProviderError_GenericCopyWithImpl<PrfProviderError_Generic>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PrfProviderError_Generic&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'PrfProviderError.generic(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PrfProviderError_GenericCopyWith<$Res> implements $PrfProviderErrorCopyWith<$Res> {
+  factory $PrfProviderError_GenericCopyWith(PrfProviderError_Generic value, $Res Function(PrfProviderError_Generic) _then) = _$PrfProviderError_GenericCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$PrfProviderError_GenericCopyWithImpl<$Res>
+    implements $PrfProviderError_GenericCopyWith<$Res> {
+  _$PrfProviderError_GenericCopyWithImpl(this._self, this._then);
+
+  final PrfProviderError_Generic _self;
+  final $Res Function(PrfProviderError_Generic) _then;
+
+/// Create a copy of PrfProviderError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(PrfProviderError_Generic(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$SdkError {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SdkError()';
+}
+
+
+}
+
+/// @nodoc
+class $SdkErrorCopyWith<$Res>  {
+$SdkErrorCopyWith(SdkError _, $Res Function(SdkError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [SdkError].
+extension SdkErrorPatterns on SdkError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SdkError_SparkError value)?  sparkError,TResult Function( SdkError_InsufficientFunds value)?  insufficientFunds,TResult Function( SdkError_InvalidUuid value)?  invalidUuid,TResult Function( SdkError_InvalidInput value)?  invalidInput,TResult Function( SdkError_CrossChainAmountOutOfRange value)?  crossChainAmountOutOfRange,TResult Function( SdkError_CrossChainRouteUnavailable value)?  crossChainRouteUnavailable,TResult Function( SdkError_CrossChainDisabled value)?  crossChainDisabled,TResult Function( SdkError_NetworkError value)?  networkError,TResult Function( SdkError_StorageError value)?  storageError,TResult Function( SdkError_ChainServiceError value)?  chainServiceError,TResult Function( SdkError_MaxDepositClaimFeeExceeded value)?  maxDepositClaimFeeExceeded,TResult Function( SdkError_MissingUtxo value)?  missingUtxo,TResult Function( SdkError_DepositTooSmall value)?  depositTooSmall,TResult Function( SdkError_DepositClaimInProgress value)?  depositClaimInProgress,TResult Function( SdkError_RefundReplacementFeeTooLow value)?  refundReplacementFeeTooLow,TResult Function( SdkError_LnurlError value)?  lnurlError,TResult Function( SdkError_Signer value)?  signer,TResult Function( SdkError_OptimizationAlreadyRunning value)?  optimizationAlreadyRunning,TResult Function( SdkError_OptimizationCancelled value)?  optimizationCancelled,TResult Function( SdkError_InsufficientCpfpFunds value)?  insufficientCpfpFunds,TResult Function( SdkError_TokenAllowance value)?  tokenAllowance,TResult Function( SdkError_Generic value)?  generic,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case SdkError_SparkError() when sparkError != null:
+return sparkError(_that);case SdkError_InsufficientFunds() when insufficientFunds != null:
+return insufficientFunds(_that);case SdkError_InvalidUuid() when invalidUuid != null:
+return invalidUuid(_that);case SdkError_InvalidInput() when invalidInput != null:
+return invalidInput(_that);case SdkError_CrossChainAmountOutOfRange() when crossChainAmountOutOfRange != null:
+return crossChainAmountOutOfRange(_that);case SdkError_CrossChainRouteUnavailable() when crossChainRouteUnavailable != null:
+return crossChainRouteUnavailable(_that);case SdkError_CrossChainDisabled() when crossChainDisabled != null:
+return crossChainDisabled(_that);case SdkError_NetworkError() when networkError != null:
+return networkError(_that);case SdkError_StorageError() when storageError != null:
+return storageError(_that);case SdkError_ChainServiceError() when chainServiceError != null:
+return chainServiceError(_that);case SdkError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that);case SdkError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that);case SdkError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that);case SdkError_DepositClaimInProgress() when depositClaimInProgress != null:
+return depositClaimInProgress(_that);case SdkError_RefundReplacementFeeTooLow() when refundReplacementFeeTooLow != null:
+return refundReplacementFeeTooLow(_that);case SdkError_LnurlError() when lnurlError != null:
+return lnurlError(_that);case SdkError_Signer() when signer != null:
+return signer(_that);case SdkError_OptimizationAlreadyRunning() when optimizationAlreadyRunning != null:
+return optimizationAlreadyRunning(_that);case SdkError_OptimizationCancelled() when optimizationCancelled != null:
+return optimizationCancelled(_that);case SdkError_InsufficientCpfpFunds() when insufficientCpfpFunds != null:
+return insufficientCpfpFunds(_that);case SdkError_TokenAllowance() when tokenAllowance != null:
+return tokenAllowance(_that);case SdkError_Generic() when generic != null:
+return generic(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SdkError_SparkError value)  sparkError,required TResult Function( SdkError_InsufficientFunds value)  insufficientFunds,required TResult Function( SdkError_InvalidUuid value)  invalidUuid,required TResult Function( SdkError_InvalidInput value)  invalidInput,required TResult Function( SdkError_CrossChainAmountOutOfRange value)  crossChainAmountOutOfRange,required TResult Function( SdkError_CrossChainRouteUnavailable value)  crossChainRouteUnavailable,required TResult Function( SdkError_CrossChainDisabled value)  crossChainDisabled,required TResult Function( SdkError_NetworkError value)  networkError,required TResult Function( SdkError_StorageError value)  storageError,required TResult Function( SdkError_ChainServiceError value)  chainServiceError,required TResult Function( SdkError_MaxDepositClaimFeeExceeded value)  maxDepositClaimFeeExceeded,required TResult Function( SdkError_MissingUtxo value)  missingUtxo,required TResult Function( SdkError_DepositTooSmall value)  depositTooSmall,required TResult Function( SdkError_DepositClaimInProgress value)  depositClaimInProgress,required TResult Function( SdkError_RefundReplacementFeeTooLow value)  refundReplacementFeeTooLow,required TResult Function( SdkError_LnurlError value)  lnurlError,required TResult Function( SdkError_Signer value)  signer,required TResult Function( SdkError_OptimizationAlreadyRunning value)  optimizationAlreadyRunning,required TResult Function( SdkError_OptimizationCancelled value)  optimizationCancelled,required TResult Function( SdkError_InsufficientCpfpFunds value)  insufficientCpfpFunds,required TResult Function( SdkError_TokenAllowance value)  tokenAllowance,required TResult Function( SdkError_Generic value)  generic,}){
+final _that = this;
+switch (_that) {
+case SdkError_SparkError():
+return sparkError(_that);case SdkError_InsufficientFunds():
+return insufficientFunds(_that);case SdkError_InvalidUuid():
+return invalidUuid(_that);case SdkError_InvalidInput():
+return invalidInput(_that);case SdkError_CrossChainAmountOutOfRange():
+return crossChainAmountOutOfRange(_that);case SdkError_CrossChainRouteUnavailable():
+return crossChainRouteUnavailable(_that);case SdkError_CrossChainDisabled():
+return crossChainDisabled(_that);case SdkError_NetworkError():
+return networkError(_that);case SdkError_StorageError():
+return storageError(_that);case SdkError_ChainServiceError():
+return chainServiceError(_that);case SdkError_MaxDepositClaimFeeExceeded():
+return maxDepositClaimFeeExceeded(_that);case SdkError_MissingUtxo():
+return missingUtxo(_that);case SdkError_DepositTooSmall():
+return depositTooSmall(_that);case SdkError_DepositClaimInProgress():
+return depositClaimInProgress(_that);case SdkError_RefundReplacementFeeTooLow():
+return refundReplacementFeeTooLow(_that);case SdkError_LnurlError():
+return lnurlError(_that);case SdkError_Signer():
+return signer(_that);case SdkError_OptimizationAlreadyRunning():
+return optimizationAlreadyRunning(_that);case SdkError_OptimizationCancelled():
+return optimizationCancelled(_that);case SdkError_InsufficientCpfpFunds():
+return insufficientCpfpFunds(_that);case SdkError_TokenAllowance():
+return tokenAllowance(_that);case SdkError_Generic():
+return generic(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SdkError_SparkError value)?  sparkError,TResult? Function( SdkError_InsufficientFunds value)?  insufficientFunds,TResult? Function( SdkError_InvalidUuid value)?  invalidUuid,TResult? Function( SdkError_InvalidInput value)?  invalidInput,TResult? Function( SdkError_CrossChainAmountOutOfRange value)?  crossChainAmountOutOfRange,TResult? Function( SdkError_CrossChainRouteUnavailable value)?  crossChainRouteUnavailable,TResult? Function( SdkError_CrossChainDisabled value)?  crossChainDisabled,TResult? Function( SdkError_NetworkError value)?  networkError,TResult? Function( SdkError_StorageError value)?  storageError,TResult? Function( SdkError_ChainServiceError value)?  chainServiceError,TResult? Function( SdkError_MaxDepositClaimFeeExceeded value)?  maxDepositClaimFeeExceeded,TResult? Function( SdkError_MissingUtxo value)?  missingUtxo,TResult? Function( SdkError_DepositTooSmall value)?  depositTooSmall,TResult? Function( SdkError_DepositClaimInProgress value)?  depositClaimInProgress,TResult? Function( SdkError_RefundReplacementFeeTooLow value)?  refundReplacementFeeTooLow,TResult? Function( SdkError_LnurlError value)?  lnurlError,TResult? Function( SdkError_Signer value)?  signer,TResult? Function( SdkError_OptimizationAlreadyRunning value)?  optimizationAlreadyRunning,TResult? Function( SdkError_OptimizationCancelled value)?  optimizationCancelled,TResult? Function( SdkError_InsufficientCpfpFunds value)?  insufficientCpfpFunds,TResult? Function( SdkError_TokenAllowance value)?  tokenAllowance,TResult? Function( SdkError_Generic value)?  generic,}){
+final _that = this;
+switch (_that) {
+case SdkError_SparkError() when sparkError != null:
+return sparkError(_that);case SdkError_InsufficientFunds() when insufficientFunds != null:
+return insufficientFunds(_that);case SdkError_InvalidUuid() when invalidUuid != null:
+return invalidUuid(_that);case SdkError_InvalidInput() when invalidInput != null:
+return invalidInput(_that);case SdkError_CrossChainAmountOutOfRange() when crossChainAmountOutOfRange != null:
+return crossChainAmountOutOfRange(_that);case SdkError_CrossChainRouteUnavailable() when crossChainRouteUnavailable != null:
+return crossChainRouteUnavailable(_that);case SdkError_CrossChainDisabled() when crossChainDisabled != null:
+return crossChainDisabled(_that);case SdkError_NetworkError() when networkError != null:
+return networkError(_that);case SdkError_StorageError() when storageError != null:
+return storageError(_that);case SdkError_ChainServiceError() when chainServiceError != null:
+return chainServiceError(_that);case SdkError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that);case SdkError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that);case SdkError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that);case SdkError_DepositClaimInProgress() when depositClaimInProgress != null:
+return depositClaimInProgress(_that);case SdkError_RefundReplacementFeeTooLow() when refundReplacementFeeTooLow != null:
+return refundReplacementFeeTooLow(_that);case SdkError_LnurlError() when lnurlError != null:
+return lnurlError(_that);case SdkError_Signer() when signer != null:
+return signer(_that);case SdkError_OptimizationAlreadyRunning() when optimizationAlreadyRunning != null:
+return optimizationAlreadyRunning(_that);case SdkError_OptimizationCancelled() when optimizationCancelled != null:
+return optimizationCancelled(_that);case SdkError_InsufficientCpfpFunds() when insufficientCpfpFunds != null:
+return insufficientCpfpFunds(_that);case SdkError_TokenAllowance() when tokenAllowance != null:
+return tokenAllowance(_that);case SdkError_Generic() when generic != null:
+return generic(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String field0)?  sparkError,TResult Function( String? tokenIdentifier)?  insufficientFunds,TResult Function( String field0)?  invalidUuid,TResult Function( String field0)?  invalidInput,TResult Function( String reason,  bool tooSmall,  BigInt? boundAmount,  BigInt? boundUsdCents,  String docsUrl)?  crossChainAmountOutOfRange,TResult Function( String reason,  bool temporary,  String docsUrl)?  crossChainRouteUnavailable,TResult Function( String docsUrl)?  crossChainDisabled,TResult Function( String field0)?  networkError,TResult Function( String field0)?  storageError,TResult Function( String field0)?  chainServiceError,TResult Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats,  String docsUrl)?  maxDepositClaimFeeExceeded,TResult Function( String tx,  int vout)?  missingUtxo,TResult Function( String tx,  int vout,  String docsUrl)?  depositTooSmall,TResult Function( String tx,  int vout,  String docsUrl)?  depositClaimInProgress,TResult Function( BigInt pendingFeeSats,  BigInt requiredFeeSats,  String docsUrl)?  refundReplacementFeeTooLow,TResult Function( String field0)?  lnurlError,TResult Function( String field0)?  signer,TResult Function()?  optimizationAlreadyRunning,TResult Function()?  optimizationCancelled,TResult Function( BigInt requiredSats,  String docsUrl)?  insufficientCpfpFunds,TResult Function( TokenAllowanceErrorReason reason,  String details,  String docsUrl)?  tokenAllowance,TResult Function( String field0)?  generic,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case SdkError_SparkError() when sparkError != null:
+return sparkError(_that.field0);case SdkError_InsufficientFunds() when insufficientFunds != null:
+return insufficientFunds(_that.tokenIdentifier);case SdkError_InvalidUuid() when invalidUuid != null:
+return invalidUuid(_that.field0);case SdkError_InvalidInput() when invalidInput != null:
+return invalidInput(_that.field0);case SdkError_CrossChainAmountOutOfRange() when crossChainAmountOutOfRange != null:
+return crossChainAmountOutOfRange(_that.reason,_that.tooSmall,_that.boundAmount,_that.boundUsdCents,_that.docsUrl);case SdkError_CrossChainRouteUnavailable() when crossChainRouteUnavailable != null:
+return crossChainRouteUnavailable(_that.reason,_that.temporary,_that.docsUrl);case SdkError_CrossChainDisabled() when crossChainDisabled != null:
+return crossChainDisabled(_that.docsUrl);case SdkError_NetworkError() when networkError != null:
+return networkError(_that.field0);case SdkError_StorageError() when storageError != null:
+return storageError(_that.field0);case SdkError_ChainServiceError() when chainServiceError != null:
+return chainServiceError(_that.field0);case SdkError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that.tx,_that.vout);case SdkError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that.tx,_that.vout,_that.docsUrl);case SdkError_DepositClaimInProgress() when depositClaimInProgress != null:
+return depositClaimInProgress(_that.tx,_that.vout,_that.docsUrl);case SdkError_RefundReplacementFeeTooLow() when refundReplacementFeeTooLow != null:
+return refundReplacementFeeTooLow(_that.pendingFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_LnurlError() when lnurlError != null:
+return lnurlError(_that.field0);case SdkError_Signer() when signer != null:
+return signer(_that.field0);case SdkError_OptimizationAlreadyRunning() when optimizationAlreadyRunning != null:
+return optimizationAlreadyRunning();case SdkError_OptimizationCancelled() when optimizationCancelled != null:
+return optimizationCancelled();case SdkError_InsufficientCpfpFunds() when insufficientCpfpFunds != null:
+return insufficientCpfpFunds(_that.requiredSats,_that.docsUrl);case SdkError_TokenAllowance() when tokenAllowance != null:
+return tokenAllowance(_that.reason,_that.details,_that.docsUrl);case SdkError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String field0)  sparkError,required TResult Function( String? tokenIdentifier)  insufficientFunds,required TResult Function( String field0)  invalidUuid,required TResult Function( String field0)  invalidInput,required TResult Function( String reason,  bool tooSmall,  BigInt? boundAmount,  BigInt? boundUsdCents,  String docsUrl)  crossChainAmountOutOfRange,required TResult Function( String reason,  bool temporary,  String docsUrl)  crossChainRouteUnavailable,required TResult Function( String docsUrl)  crossChainDisabled,required TResult Function( String field0)  networkError,required TResult Function( String field0)  storageError,required TResult Function( String field0)  chainServiceError,required TResult Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats,  String docsUrl)  maxDepositClaimFeeExceeded,required TResult Function( String tx,  int vout)  missingUtxo,required TResult Function( String tx,  int vout,  String docsUrl)  depositTooSmall,required TResult Function( String tx,  int vout,  String docsUrl)  depositClaimInProgress,required TResult Function( BigInt pendingFeeSats,  BigInt requiredFeeSats,  String docsUrl)  refundReplacementFeeTooLow,required TResult Function( String field0)  lnurlError,required TResult Function( String field0)  signer,required TResult Function()  optimizationAlreadyRunning,required TResult Function()  optimizationCancelled,required TResult Function( BigInt requiredSats,  String docsUrl)  insufficientCpfpFunds,required TResult Function( TokenAllowanceErrorReason reason,  String details,  String docsUrl)  tokenAllowance,required TResult Function( String field0)  generic,}) {final _that = this;
+switch (_that) {
+case SdkError_SparkError():
+return sparkError(_that.field0);case SdkError_InsufficientFunds():
+return insufficientFunds(_that.tokenIdentifier);case SdkError_InvalidUuid():
+return invalidUuid(_that.field0);case SdkError_InvalidInput():
+return invalidInput(_that.field0);case SdkError_CrossChainAmountOutOfRange():
+return crossChainAmountOutOfRange(_that.reason,_that.tooSmall,_that.boundAmount,_that.boundUsdCents,_that.docsUrl);case SdkError_CrossChainRouteUnavailable():
+return crossChainRouteUnavailable(_that.reason,_that.temporary,_that.docsUrl);case SdkError_CrossChainDisabled():
+return crossChainDisabled(_that.docsUrl);case SdkError_NetworkError():
+return networkError(_that.field0);case SdkError_StorageError():
+return storageError(_that.field0);case SdkError_ChainServiceError():
+return chainServiceError(_that.field0);case SdkError_MaxDepositClaimFeeExceeded():
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_MissingUtxo():
+return missingUtxo(_that.tx,_that.vout);case SdkError_DepositTooSmall():
+return depositTooSmall(_that.tx,_that.vout,_that.docsUrl);case SdkError_DepositClaimInProgress():
+return depositClaimInProgress(_that.tx,_that.vout,_that.docsUrl);case SdkError_RefundReplacementFeeTooLow():
+return refundReplacementFeeTooLow(_that.pendingFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_LnurlError():
+return lnurlError(_that.field0);case SdkError_Signer():
+return signer(_that.field0);case SdkError_OptimizationAlreadyRunning():
+return optimizationAlreadyRunning();case SdkError_OptimizationCancelled():
+return optimizationCancelled();case SdkError_InsufficientCpfpFunds():
+return insufficientCpfpFunds(_that.requiredSats,_that.docsUrl);case SdkError_TokenAllowance():
+return tokenAllowance(_that.reason,_that.details,_that.docsUrl);case SdkError_Generic():
+return generic(_that.field0);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String field0)?  sparkError,TResult? Function( String? tokenIdentifier)?  insufficientFunds,TResult? Function( String field0)?  invalidUuid,TResult? Function( String field0)?  invalidInput,TResult? Function( String reason,  bool tooSmall,  BigInt? boundAmount,  BigInt? boundUsdCents,  String docsUrl)?  crossChainAmountOutOfRange,TResult? Function( String reason,  bool temporary,  String docsUrl)?  crossChainRouteUnavailable,TResult? Function( String docsUrl)?  crossChainDisabled,TResult? Function( String field0)?  networkError,TResult? Function( String field0)?  storageError,TResult? Function( String field0)?  chainServiceError,TResult? Function( String tx,  int vout,  BigInt? maxFeeSats,  BigInt requiredFeeSats,  String docsUrl)?  maxDepositClaimFeeExceeded,TResult? Function( String tx,  int vout)?  missingUtxo,TResult? Function( String tx,  int vout,  String docsUrl)?  depositTooSmall,TResult? Function( String tx,  int vout,  String docsUrl)?  depositClaimInProgress,TResult? Function( BigInt pendingFeeSats,  BigInt requiredFeeSats,  String docsUrl)?  refundReplacementFeeTooLow,TResult? Function( String field0)?  lnurlError,TResult? Function( String field0)?  signer,TResult? Function()?  optimizationAlreadyRunning,TResult? Function()?  optimizationCancelled,TResult? Function( BigInt requiredSats,  String docsUrl)?  insufficientCpfpFunds,TResult? Function( TokenAllowanceErrorReason reason,  String details,  String docsUrl)?  tokenAllowance,TResult? Function( String field0)?  generic,}) {final _that = this;
+switch (_that) {
+case SdkError_SparkError() when sparkError != null:
+return sparkError(_that.field0);case SdkError_InsufficientFunds() when insufficientFunds != null:
+return insufficientFunds(_that.tokenIdentifier);case SdkError_InvalidUuid() when invalidUuid != null:
+return invalidUuid(_that.field0);case SdkError_InvalidInput() when invalidInput != null:
+return invalidInput(_that.field0);case SdkError_CrossChainAmountOutOfRange() when crossChainAmountOutOfRange != null:
+return crossChainAmountOutOfRange(_that.reason,_that.tooSmall,_that.boundAmount,_that.boundUsdCents,_that.docsUrl);case SdkError_CrossChainRouteUnavailable() when crossChainRouteUnavailable != null:
+return crossChainRouteUnavailable(_that.reason,_that.temporary,_that.docsUrl);case SdkError_CrossChainDisabled() when crossChainDisabled != null:
+return crossChainDisabled(_that.docsUrl);case SdkError_NetworkError() when networkError != null:
+return networkError(_that.field0);case SdkError_StorageError() when storageError != null:
+return storageError(_that.field0);case SdkError_ChainServiceError() when chainServiceError != null:
+return chainServiceError(_that.field0);case SdkError_MaxDepositClaimFeeExceeded() when maxDepositClaimFeeExceeded != null:
+return maxDepositClaimFeeExceeded(_that.tx,_that.vout,_that.maxFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_MissingUtxo() when missingUtxo != null:
+return missingUtxo(_that.tx,_that.vout);case SdkError_DepositTooSmall() when depositTooSmall != null:
+return depositTooSmall(_that.tx,_that.vout,_that.docsUrl);case SdkError_DepositClaimInProgress() when depositClaimInProgress != null:
+return depositClaimInProgress(_that.tx,_that.vout,_that.docsUrl);case SdkError_RefundReplacementFeeTooLow() when refundReplacementFeeTooLow != null:
+return refundReplacementFeeTooLow(_that.pendingFeeSats,_that.requiredFeeSats,_that.docsUrl);case SdkError_LnurlError() when lnurlError != null:
+return lnurlError(_that.field0);case SdkError_Signer() when signer != null:
+return signer(_that.field0);case SdkError_OptimizationAlreadyRunning() when optimizationAlreadyRunning != null:
+return optimizationAlreadyRunning();case SdkError_OptimizationCancelled() when optimizationCancelled != null:
+return optimizationCancelled();case SdkError_InsufficientCpfpFunds() when insufficientCpfpFunds != null:
+return insufficientCpfpFunds(_that.requiredSats,_that.docsUrl);case SdkError_TokenAllowance() when tokenAllowance != null:
+return tokenAllowance(_that.reason,_that.details,_that.docsUrl);case SdkError_Generic() when generic != null:
+return generic(_that.field0);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class SdkError_SparkError extends SdkError {
+  const SdkError_SparkError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_SparkErrorCopyWith<SdkError_SparkError> get copyWith => _$SdkError_SparkErrorCopyWithImpl<SdkError_SparkError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_SparkError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.sparkError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_SparkErrorCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_SparkErrorCopyWith(SdkError_SparkError value, $Res Function(SdkError_SparkError) _then) = _$SdkError_SparkErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_SparkErrorCopyWithImpl<$Res>
+    implements $SdkError_SparkErrorCopyWith<$Res> {
+  _$SdkError_SparkErrorCopyWithImpl(this._self, this._then);
+
+  final SdkError_SparkError _self;
+  final $Res Function(SdkError_SparkError) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_SparkError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_InsufficientFunds extends SdkError {
+  const SdkError_InsufficientFunds({this.tokenIdentifier}): super._();
+  
+
+ final  String? tokenIdentifier;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_InsufficientFundsCopyWith<SdkError_InsufficientFunds> get copyWith => _$SdkError_InsufficientFundsCopyWithImpl<SdkError_InsufficientFunds>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_InsufficientFunds&&(identical(other.tokenIdentifier, tokenIdentifier) || other.tokenIdentifier == tokenIdentifier));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tokenIdentifier);
+
+@override
+String toString() {
+  return 'SdkError.insufficientFunds(tokenIdentifier: $tokenIdentifier)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_InsufficientFundsCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_InsufficientFundsCopyWith(SdkError_InsufficientFunds value, $Res Function(SdkError_InsufficientFunds) _then) = _$SdkError_InsufficientFundsCopyWithImpl;
+@useResult
+$Res call({
+ String? tokenIdentifier
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_InsufficientFundsCopyWithImpl<$Res>
+    implements $SdkError_InsufficientFundsCopyWith<$Res> {
+  _$SdkError_InsufficientFundsCopyWithImpl(this._self, this._then);
+
+  final SdkError_InsufficientFunds _self;
+  final $Res Function(SdkError_InsufficientFunds) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tokenIdentifier = freezed,}) {
+  return _then(SdkError_InsufficientFunds(
+tokenIdentifier: freezed == tokenIdentifier ? _self.tokenIdentifier : tokenIdentifier // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_InvalidUuid extends SdkError {
+  const SdkError_InvalidUuid(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_InvalidUuidCopyWith<SdkError_InvalidUuid> get copyWith => _$SdkError_InvalidUuidCopyWithImpl<SdkError_InvalidUuid>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_InvalidUuid&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.invalidUuid(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_InvalidUuidCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_InvalidUuidCopyWith(SdkError_InvalidUuid value, $Res Function(SdkError_InvalidUuid) _then) = _$SdkError_InvalidUuidCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_InvalidUuidCopyWithImpl<$Res>
+    implements $SdkError_InvalidUuidCopyWith<$Res> {
+  _$SdkError_InvalidUuidCopyWithImpl(this._self, this._then);
+
+  final SdkError_InvalidUuid _self;
+  final $Res Function(SdkError_InvalidUuid) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_InvalidUuid(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_InvalidInput extends SdkError {
+  const SdkError_InvalidInput(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_InvalidInputCopyWith<SdkError_InvalidInput> get copyWith => _$SdkError_InvalidInputCopyWithImpl<SdkError_InvalidInput>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_InvalidInput&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.invalidInput(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_InvalidInputCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_InvalidInputCopyWith(SdkError_InvalidInput value, $Res Function(SdkError_InvalidInput) _then) = _$SdkError_InvalidInputCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_InvalidInputCopyWithImpl<$Res>
+    implements $SdkError_InvalidInputCopyWith<$Res> {
+  _$SdkError_InvalidInputCopyWithImpl(this._self, this._then);
+
+  final SdkError_InvalidInput _self;
+  final $Res Function(SdkError_InvalidInput) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_InvalidInput(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_CrossChainAmountOutOfRange extends SdkError {
+  const SdkError_CrossChainAmountOutOfRange({required this.reason, required this.tooSmall, this.boundAmount, this.boundUsdCents, required this.docsUrl}): super._();
+  
+
+ final  String reason;
+ final  bool tooSmall;
+ final  BigInt? boundAmount;
+ final  BigInt? boundUsdCents;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_CrossChainAmountOutOfRangeCopyWith<SdkError_CrossChainAmountOutOfRange> get copyWith => _$SdkError_CrossChainAmountOutOfRangeCopyWithImpl<SdkError_CrossChainAmountOutOfRange>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_CrossChainAmountOutOfRange&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.tooSmall, tooSmall) || other.tooSmall == tooSmall)&&(identical(other.boundAmount, boundAmount) || other.boundAmount == boundAmount)&&(identical(other.boundUsdCents, boundUsdCents) || other.boundUsdCents == boundUsdCents)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason,tooSmall,boundAmount,boundUsdCents,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.crossChainAmountOutOfRange(reason: $reason, tooSmall: $tooSmall, boundAmount: $boundAmount, boundUsdCents: $boundUsdCents, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_CrossChainAmountOutOfRangeCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_CrossChainAmountOutOfRangeCopyWith(SdkError_CrossChainAmountOutOfRange value, $Res Function(SdkError_CrossChainAmountOutOfRange) _then) = _$SdkError_CrossChainAmountOutOfRangeCopyWithImpl;
+@useResult
+$Res call({
+ String reason, bool tooSmall, BigInt? boundAmount, BigInt? boundUsdCents, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_CrossChainAmountOutOfRangeCopyWithImpl<$Res>
+    implements $SdkError_CrossChainAmountOutOfRangeCopyWith<$Res> {
+  _$SdkError_CrossChainAmountOutOfRangeCopyWithImpl(this._self, this._then);
+
+  final SdkError_CrossChainAmountOutOfRange _self;
+  final $Res Function(SdkError_CrossChainAmountOutOfRange) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,Object? tooSmall = null,Object? boundAmount = freezed,Object? boundUsdCents = freezed,Object? docsUrl = null,}) {
+  return _then(SdkError_CrossChainAmountOutOfRange(
+reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as String,tooSmall: null == tooSmall ? _self.tooSmall : tooSmall // ignore: cast_nullable_to_non_nullable
+as bool,boundAmount: freezed == boundAmount ? _self.boundAmount : boundAmount // ignore: cast_nullable_to_non_nullable
+as BigInt?,boundUsdCents: freezed == boundUsdCents ? _self.boundUsdCents : boundUsdCents // ignore: cast_nullable_to_non_nullable
+as BigInt?,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_CrossChainRouteUnavailable extends SdkError {
+  const SdkError_CrossChainRouteUnavailable({required this.reason, required this.temporary, required this.docsUrl}): super._();
+  
+
+ final  String reason;
+ final  bool temporary;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_CrossChainRouteUnavailableCopyWith<SdkError_CrossChainRouteUnavailable> get copyWith => _$SdkError_CrossChainRouteUnavailableCopyWithImpl<SdkError_CrossChainRouteUnavailable>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_CrossChainRouteUnavailable&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.temporary, temporary) || other.temporary == temporary)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason,temporary,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.crossChainRouteUnavailable(reason: $reason, temporary: $temporary, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_CrossChainRouteUnavailableCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_CrossChainRouteUnavailableCopyWith(SdkError_CrossChainRouteUnavailable value, $Res Function(SdkError_CrossChainRouteUnavailable) _then) = _$SdkError_CrossChainRouteUnavailableCopyWithImpl;
+@useResult
+$Res call({
+ String reason, bool temporary, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_CrossChainRouteUnavailableCopyWithImpl<$Res>
+    implements $SdkError_CrossChainRouteUnavailableCopyWith<$Res> {
+  _$SdkError_CrossChainRouteUnavailableCopyWithImpl(this._self, this._then);
+
+  final SdkError_CrossChainRouteUnavailable _self;
+  final $Res Function(SdkError_CrossChainRouteUnavailable) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,Object? temporary = null,Object? docsUrl = null,}) {
+  return _then(SdkError_CrossChainRouteUnavailable(
+reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as String,temporary: null == temporary ? _self.temporary : temporary // ignore: cast_nullable_to_non_nullable
+as bool,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_CrossChainDisabled extends SdkError {
+  const SdkError_CrossChainDisabled({required this.docsUrl}): super._();
+  
+
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_CrossChainDisabledCopyWith<SdkError_CrossChainDisabled> get copyWith => _$SdkError_CrossChainDisabledCopyWithImpl<SdkError_CrossChainDisabled>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_CrossChainDisabled&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.crossChainDisabled(docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_CrossChainDisabledCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_CrossChainDisabledCopyWith(SdkError_CrossChainDisabled value, $Res Function(SdkError_CrossChainDisabled) _then) = _$SdkError_CrossChainDisabledCopyWithImpl;
+@useResult
+$Res call({
+ String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_CrossChainDisabledCopyWithImpl<$Res>
+    implements $SdkError_CrossChainDisabledCopyWith<$Res> {
+  _$SdkError_CrossChainDisabledCopyWithImpl(this._self, this._then);
+
+  final SdkError_CrossChainDisabled _self;
+  final $Res Function(SdkError_CrossChainDisabled) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? docsUrl = null,}) {
+  return _then(SdkError_CrossChainDisabled(
+docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_NetworkError extends SdkError {
+  const SdkError_NetworkError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_NetworkErrorCopyWith<SdkError_NetworkError> get copyWith => _$SdkError_NetworkErrorCopyWithImpl<SdkError_NetworkError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_NetworkError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.networkError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_NetworkErrorCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_NetworkErrorCopyWith(SdkError_NetworkError value, $Res Function(SdkError_NetworkError) _then) = _$SdkError_NetworkErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_NetworkErrorCopyWithImpl<$Res>
+    implements $SdkError_NetworkErrorCopyWith<$Res> {
+  _$SdkError_NetworkErrorCopyWithImpl(this._self, this._then);
+
+  final SdkError_NetworkError _self;
+  final $Res Function(SdkError_NetworkError) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_NetworkError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_StorageError extends SdkError {
+  const SdkError_StorageError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_StorageErrorCopyWith<SdkError_StorageError> get copyWith => _$SdkError_StorageErrorCopyWithImpl<SdkError_StorageError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_StorageError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.storageError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_StorageErrorCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_StorageErrorCopyWith(SdkError_StorageError value, $Res Function(SdkError_StorageError) _then) = _$SdkError_StorageErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_StorageErrorCopyWithImpl<$Res>
+    implements $SdkError_StorageErrorCopyWith<$Res> {
+  _$SdkError_StorageErrorCopyWithImpl(this._self, this._then);
+
+  final SdkError_StorageError _self;
+  final $Res Function(SdkError_StorageError) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_StorageError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_ChainServiceError extends SdkError {
+  const SdkError_ChainServiceError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_ChainServiceErrorCopyWith<SdkError_ChainServiceError> get copyWith => _$SdkError_ChainServiceErrorCopyWithImpl<SdkError_ChainServiceError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_ChainServiceError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.chainServiceError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_ChainServiceErrorCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_ChainServiceErrorCopyWith(SdkError_ChainServiceError value, $Res Function(SdkError_ChainServiceError) _then) = _$SdkError_ChainServiceErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_ChainServiceErrorCopyWithImpl<$Res>
+    implements $SdkError_ChainServiceErrorCopyWith<$Res> {
+  _$SdkError_ChainServiceErrorCopyWithImpl(this._self, this._then);
+
+  final SdkError_ChainServiceError _self;
+  final $Res Function(SdkError_ChainServiceError) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_ChainServiceError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_MaxDepositClaimFeeExceeded extends SdkError {
+  const SdkError_MaxDepositClaimFeeExceeded({required this.tx, required this.vout, this.maxFeeSats, required this.requiredFeeSats, required this.docsUrl}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+ final  BigInt? maxFeeSats;
+ final  BigInt requiredFeeSats;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_MaxDepositClaimFeeExceededCopyWith<SdkError_MaxDepositClaimFeeExceeded> get copyWith => _$SdkError_MaxDepositClaimFeeExceededCopyWithImpl<SdkError_MaxDepositClaimFeeExceeded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_MaxDepositClaimFeeExceeded&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout)&&(identical(other.maxFeeSats, maxFeeSats) || other.maxFeeSats == maxFeeSats)&&(identical(other.requiredFeeSats, requiredFeeSats) || other.requiredFeeSats == requiredFeeSats)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout,maxFeeSats,requiredFeeSats,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.maxDepositClaimFeeExceeded(tx: $tx, vout: $vout, maxFeeSats: $maxFeeSats, requiredFeeSats: $requiredFeeSats, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_MaxDepositClaimFeeExceededCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_MaxDepositClaimFeeExceededCopyWith(SdkError_MaxDepositClaimFeeExceeded value, $Res Function(SdkError_MaxDepositClaimFeeExceeded) _then) = _$SdkError_MaxDepositClaimFeeExceededCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout, BigInt? maxFeeSats, BigInt requiredFeeSats, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_MaxDepositClaimFeeExceededCopyWithImpl<$Res>
+    implements $SdkError_MaxDepositClaimFeeExceededCopyWith<$Res> {
+  _$SdkError_MaxDepositClaimFeeExceededCopyWithImpl(this._self, this._then);
+
+  final SdkError_MaxDepositClaimFeeExceeded _self;
+  final $Res Function(SdkError_MaxDepositClaimFeeExceeded) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,Object? maxFeeSats = freezed,Object? requiredFeeSats = null,Object? docsUrl = null,}) {
+  return _then(SdkError_MaxDepositClaimFeeExceeded(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,maxFeeSats: freezed == maxFeeSats ? _self.maxFeeSats : maxFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt?,requiredFeeSats: null == requiredFeeSats ? _self.requiredFeeSats : requiredFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_MissingUtxo extends SdkError {
+  const SdkError_MissingUtxo({required this.tx, required this.vout}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_MissingUtxoCopyWith<SdkError_MissingUtxo> get copyWith => _$SdkError_MissingUtxoCopyWithImpl<SdkError_MissingUtxo>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_MissingUtxo&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout);
+
+@override
+String toString() {
+  return 'SdkError.missingUtxo(tx: $tx, vout: $vout)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_MissingUtxoCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_MissingUtxoCopyWith(SdkError_MissingUtxo value, $Res Function(SdkError_MissingUtxo) _then) = _$SdkError_MissingUtxoCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_MissingUtxoCopyWithImpl<$Res>
+    implements $SdkError_MissingUtxoCopyWith<$Res> {
+  _$SdkError_MissingUtxoCopyWithImpl(this._self, this._then);
+
+  final SdkError_MissingUtxo _self;
+  final $Res Function(SdkError_MissingUtxo) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,}) {
+  return _then(SdkError_MissingUtxo(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_DepositTooSmall extends SdkError {
+  const SdkError_DepositTooSmall({required this.tx, required this.vout, required this.docsUrl}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_DepositTooSmallCopyWith<SdkError_DepositTooSmall> get copyWith => _$SdkError_DepositTooSmallCopyWithImpl<SdkError_DepositTooSmall>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_DepositTooSmall&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.depositTooSmall(tx: $tx, vout: $vout, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_DepositTooSmallCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_DepositTooSmallCopyWith(SdkError_DepositTooSmall value, $Res Function(SdkError_DepositTooSmall) _then) = _$SdkError_DepositTooSmallCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_DepositTooSmallCopyWithImpl<$Res>
+    implements $SdkError_DepositTooSmallCopyWith<$Res> {
+  _$SdkError_DepositTooSmallCopyWithImpl(this._self, this._then);
+
+  final SdkError_DepositTooSmall _self;
+  final $Res Function(SdkError_DepositTooSmall) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,Object? docsUrl = null,}) {
+  return _then(SdkError_DepositTooSmall(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_DepositClaimInProgress extends SdkError {
+  const SdkError_DepositClaimInProgress({required this.tx, required this.vout, required this.docsUrl}): super._();
+  
+
+ final  String tx;
+ final  int vout;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_DepositClaimInProgressCopyWith<SdkError_DepositClaimInProgress> get copyWith => _$SdkError_DepositClaimInProgressCopyWithImpl<SdkError_DepositClaimInProgress>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_DepositClaimInProgress&&(identical(other.tx, tx) || other.tx == tx)&&(identical(other.vout, vout) || other.vout == vout)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,tx,vout,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.depositClaimInProgress(tx: $tx, vout: $vout, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_DepositClaimInProgressCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_DepositClaimInProgressCopyWith(SdkError_DepositClaimInProgress value, $Res Function(SdkError_DepositClaimInProgress) _then) = _$SdkError_DepositClaimInProgressCopyWithImpl;
+@useResult
+$Res call({
+ String tx, int vout, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_DepositClaimInProgressCopyWithImpl<$Res>
+    implements $SdkError_DepositClaimInProgressCopyWith<$Res> {
+  _$SdkError_DepositClaimInProgressCopyWithImpl(this._self, this._then);
+
+  final SdkError_DepositClaimInProgress _self;
+  final $Res Function(SdkError_DepositClaimInProgress) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? tx = null,Object? vout = null,Object? docsUrl = null,}) {
+  return _then(SdkError_DepositClaimInProgress(
+tx: null == tx ? _self.tx : tx // ignore: cast_nullable_to_non_nullable
+as String,vout: null == vout ? _self.vout : vout // ignore: cast_nullable_to_non_nullable
+as int,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_RefundReplacementFeeTooLow extends SdkError {
+  const SdkError_RefundReplacementFeeTooLow({required this.pendingFeeSats, required this.requiredFeeSats, required this.docsUrl}): super._();
+  
+
+ final  BigInt pendingFeeSats;
+ final  BigInt requiredFeeSats;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_RefundReplacementFeeTooLowCopyWith<SdkError_RefundReplacementFeeTooLow> get copyWith => _$SdkError_RefundReplacementFeeTooLowCopyWithImpl<SdkError_RefundReplacementFeeTooLow>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_RefundReplacementFeeTooLow&&(identical(other.pendingFeeSats, pendingFeeSats) || other.pendingFeeSats == pendingFeeSats)&&(identical(other.requiredFeeSats, requiredFeeSats) || other.requiredFeeSats == requiredFeeSats)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,pendingFeeSats,requiredFeeSats,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.refundReplacementFeeTooLow(pendingFeeSats: $pendingFeeSats, requiredFeeSats: $requiredFeeSats, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_RefundReplacementFeeTooLowCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_RefundReplacementFeeTooLowCopyWith(SdkError_RefundReplacementFeeTooLow value, $Res Function(SdkError_RefundReplacementFeeTooLow) _then) = _$SdkError_RefundReplacementFeeTooLowCopyWithImpl;
+@useResult
+$Res call({
+ BigInt pendingFeeSats, BigInt requiredFeeSats, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_RefundReplacementFeeTooLowCopyWithImpl<$Res>
+    implements $SdkError_RefundReplacementFeeTooLowCopyWith<$Res> {
+  _$SdkError_RefundReplacementFeeTooLowCopyWithImpl(this._self, this._then);
+
+  final SdkError_RefundReplacementFeeTooLow _self;
+  final $Res Function(SdkError_RefundReplacementFeeTooLow) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? pendingFeeSats = null,Object? requiredFeeSats = null,Object? docsUrl = null,}) {
+  return _then(SdkError_RefundReplacementFeeTooLow(
+pendingFeeSats: null == pendingFeeSats ? _self.pendingFeeSats : pendingFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt,requiredFeeSats: null == requiredFeeSats ? _self.requiredFeeSats : requiredFeeSats // ignore: cast_nullable_to_non_nullable
+as BigInt,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_LnurlError extends SdkError {
+  const SdkError_LnurlError(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_LnurlErrorCopyWith<SdkError_LnurlError> get copyWith => _$SdkError_LnurlErrorCopyWithImpl<SdkError_LnurlError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_LnurlError&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.lnurlError(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_LnurlErrorCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_LnurlErrorCopyWith(SdkError_LnurlError value, $Res Function(SdkError_LnurlError) _then) = _$SdkError_LnurlErrorCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_LnurlErrorCopyWithImpl<$Res>
+    implements $SdkError_LnurlErrorCopyWith<$Res> {
+  _$SdkError_LnurlErrorCopyWithImpl(this._self, this._then);
+
+  final SdkError_LnurlError _self;
+  final $Res Function(SdkError_LnurlError) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_LnurlError(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_Signer extends SdkError {
+  const SdkError_Signer(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_SignerCopyWith<SdkError_Signer> get copyWith => _$SdkError_SignerCopyWithImpl<SdkError_Signer>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_Signer&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.signer(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_SignerCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_SignerCopyWith(SdkError_Signer value, $Res Function(SdkError_Signer) _then) = _$SdkError_SignerCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_SignerCopyWithImpl<$Res>
+    implements $SdkError_SignerCopyWith<$Res> {
+  _$SdkError_SignerCopyWithImpl(this._self, this._then);
+
+  final SdkError_Signer _self;
+  final $Res Function(SdkError_Signer) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_Signer(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_OptimizationAlreadyRunning extends SdkError {
+  const SdkError_OptimizationAlreadyRunning(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_OptimizationAlreadyRunning);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SdkError.optimizationAlreadyRunning()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class SdkError_OptimizationCancelled extends SdkError {
+  const SdkError_OptimizationCancelled(): super._();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_OptimizationCancelled);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SdkError.optimizationCancelled()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class SdkError_InsufficientCpfpFunds extends SdkError {
+  const SdkError_InsufficientCpfpFunds({required this.requiredSats, required this.docsUrl}): super._();
+  
+
+ final  BigInt requiredSats;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_InsufficientCpfpFundsCopyWith<SdkError_InsufficientCpfpFunds> get copyWith => _$SdkError_InsufficientCpfpFundsCopyWithImpl<SdkError_InsufficientCpfpFunds>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_InsufficientCpfpFunds&&(identical(other.requiredSats, requiredSats) || other.requiredSats == requiredSats)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,requiredSats,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.insufficientCpfpFunds(requiredSats: $requiredSats, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_InsufficientCpfpFundsCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_InsufficientCpfpFundsCopyWith(SdkError_InsufficientCpfpFunds value, $Res Function(SdkError_InsufficientCpfpFunds) _then) = _$SdkError_InsufficientCpfpFundsCopyWithImpl;
+@useResult
+$Res call({
+ BigInt requiredSats, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_InsufficientCpfpFundsCopyWithImpl<$Res>
+    implements $SdkError_InsufficientCpfpFundsCopyWith<$Res> {
+  _$SdkError_InsufficientCpfpFundsCopyWithImpl(this._self, this._then);
+
+  final SdkError_InsufficientCpfpFunds _self;
+  final $Res Function(SdkError_InsufficientCpfpFunds) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? requiredSats = null,Object? docsUrl = null,}) {
+  return _then(SdkError_InsufficientCpfpFunds(
+requiredSats: null == requiredSats ? _self.requiredSats : requiredSats // ignore: cast_nullable_to_non_nullable
+as BigInt,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_TokenAllowance extends SdkError {
+  const SdkError_TokenAllowance({required this.reason, required this.details, required this.docsUrl}): super._();
+  
+
+ final  TokenAllowanceErrorReason reason;
+ final  String details;
+ final  String docsUrl;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_TokenAllowanceCopyWith<SdkError_TokenAllowance> get copyWith => _$SdkError_TokenAllowanceCopyWithImpl<SdkError_TokenAllowance>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_TokenAllowance&&(identical(other.reason, reason) || other.reason == reason)&&(identical(other.details, details) || other.details == details)&&(identical(other.docsUrl, docsUrl) || other.docsUrl == docsUrl));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,reason,details,docsUrl);
+
+@override
+String toString() {
+  return 'SdkError.tokenAllowance(reason: $reason, details: $details, docsUrl: $docsUrl)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_TokenAllowanceCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_TokenAllowanceCopyWith(SdkError_TokenAllowance value, $Res Function(SdkError_TokenAllowance) _then) = _$SdkError_TokenAllowanceCopyWithImpl;
+@useResult
+$Res call({
+ TokenAllowanceErrorReason reason, String details, String docsUrl
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_TokenAllowanceCopyWithImpl<$Res>
+    implements $SdkError_TokenAllowanceCopyWith<$Res> {
+  _$SdkError_TokenAllowanceCopyWithImpl(this._self, this._then);
+
+  final SdkError_TokenAllowance _self;
+  final $Res Function(SdkError_TokenAllowance) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? reason = null,Object? details = null,Object? docsUrl = null,}) {
+  return _then(SdkError_TokenAllowance(
+reason: null == reason ? _self.reason : reason // ignore: cast_nullable_to_non_nullable
+as TokenAllowanceErrorReason,details: null == details ? _self.details : details // ignore: cast_nullable_to_non_nullable
+as String,docsUrl: null == docsUrl ? _self.docsUrl : docsUrl // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class SdkError_Generic extends SdkError {
+  const SdkError_Generic(this.field0): super._();
+  
+
+ final  String field0;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SdkError_GenericCopyWith<SdkError_Generic> get copyWith => _$SdkError_GenericCopyWithImpl<SdkError_Generic>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SdkError_Generic&&(identical(other.field0, field0) || other.field0 == field0));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,field0);
+
+@override
+String toString() {
+  return 'SdkError.generic(field0: $field0)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SdkError_GenericCopyWith<$Res> implements $SdkErrorCopyWith<$Res> {
+  factory $SdkError_GenericCopyWith(SdkError_Generic value, $Res Function(SdkError_Generic) _then) = _$SdkError_GenericCopyWithImpl;
+@useResult
+$Res call({
+ String field0
+});
+
+
+
+
+}
+/// @nodoc
+class _$SdkError_GenericCopyWithImpl<$Res>
+    implements $SdkError_GenericCopyWith<$Res> {
+  _$SdkError_GenericCopyWithImpl(this._self, this._then);
+
+  final SdkError_Generic _self;
+  final $Res Function(SdkError_Generic) _then;
+
+/// Create a copy of SdkError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? field0 = null,}) {
+  return _then(SdkError_Generic(
+null == field0 ? _self.field0 : field0 // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on
