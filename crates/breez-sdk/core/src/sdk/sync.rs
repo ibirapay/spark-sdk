@@ -297,6 +297,18 @@ impl BreezSdk {
         };
         info!("sync_wallet_internal: Wallet sync completed in {elapsed:?}: {event:?}");
         self.event_emitter.emit_synced(&event).await;
+        // ibirapay: a forced sync is the caller asking for fresh state before reading it (a balance checked before a
+        // seed is replaced). Logging a failed wallet or wallet-state sync and answering Ok would let the caller act on
+        // stale cache, so a forced one reports it. Background (unforced) syncs keep logging only.
+        if force
+            && ((sync_type.contains(SyncType::Wallet) && !event.wallet)
+                || (sync_type.contains(SyncType::WalletState) && !event.wallet_state))
+        {
+            return Err(SdkError::Generic(format!(
+                "wallet sync did not complete (wallet: {}, wallet state: {})",
+                event.wallet, event.wallet_state
+            )));
+        }
         Ok(())
     }
 
