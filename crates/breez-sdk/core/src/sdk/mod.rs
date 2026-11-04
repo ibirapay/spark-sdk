@@ -42,10 +42,10 @@ use crate::{
 };
 
 #[cfg(not(all(target_family = "wasm", target_os = "unknown")))]
-const BREEZ_SYNC_SERVICE_URL: &str = "https://datasync.breez.technology";
+pub(crate) const BREEZ_SYNC_SERVICE_URL: &str = "https://datasync.breez.technology";
 
 #[cfg(all(target_family = "wasm", target_os = "unknown"))]
-const BREEZ_SYNC_SERVICE_URL: &str = "https://datasync.breez.technology:442";
+pub(crate) const BREEZ_SYNC_SERVICE_URL: &str = "https://datasync.breez.technology:442";
 
 pub(crate) const CLAIM_TX_SIZE_VBYTES: u64 = 99;
 pub(crate) const SYNC_PAGING_LIMIT: u32 = 100;
@@ -253,10 +253,13 @@ pub fn parse_spark_config(json: String) -> Result<SparkConfig, SdkError> {
     serde_json::from_str(&json).map_err(|e| SdkError::InvalidInput(e.to_string()))
 }
 
+/// The Breez-hosted Lightning-address domain `default_config` sets on mainnet (it needs a Breez API key).
+pub(crate) const BREEZ_LNURL_DOMAIN: &str = "breez.tips";
+
 #[cfg_attr(feature = "uniffi", uniffi::export)]
 pub fn default_config(network: Network) -> Config {
     let lnurl_domain = match network {
-        Network::Mainnet => Some("breez.tips".to_string()),
+        Network::Mainnet => Some(BREEZ_LNURL_DOMAIN.to_string()),
         Network::Signet | Network::Regtest => None,
     };
     Config {

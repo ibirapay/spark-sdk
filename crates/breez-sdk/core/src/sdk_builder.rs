@@ -444,7 +444,8 @@ impl SdkBuilder {
     }
 
     /// Builds the `BreezSdk` instance from the configured components.
-    pub async fn build(self) -> Result<BreezSdk, SdkError> {
+    pub async fn build(mut self) -> Result<BreezSdk, SdkError> {
+        disable_breez_services_without_key(&mut self.config);
         self.config.validate()?;
         let runtime = runtime_from_config(&self.config);
         validate_server_mode(&self.config, runtime.starts_background_services())?;
@@ -699,6 +700,21 @@ fn validate_server_mode(
         ));
     }
     Ok(())
+}
+
+/// ibirapay: mainnet without a Breez API key is a self-hosted deployment (own operators and SSP). The Breez-hosted services the default
+/// config enables need that key, so THOSE are switched off rather than called without it. A value the caller set itself (their own sync
+/// server or Lightning-address domain) is kept: only the exact Breez defaults are cleared.
+fn disable_breez_services_without_key(config: &mut Config) {
+    use crate::sdk::{BREEZ_LNURL_DOMAIN, BREEZ_SYNC_SERVICE_URL};
+    if matches!(config.network, Network::Mainnet) && config.api_key.is_none() {
+        if config.lnurl_domain.as_deref() == Some(BREEZ_LNURL_DOMAIN) {
+            config.lnurl_domain = None;
+        }
+        if config.real_time_sync_server_url.as_deref() == Some(BREEZ_SYNC_SERVICE_URL) {
+            config.real_time_sync_server_url = None;
+        }
+    }
 }
 
 /// Rejects configs whose features need local encryption when the signer can't
@@ -1210,7 +1226,7 @@ async fn build_cross_chain_context(
 #[cfg(test)]
 #[cfg(feature = "sqlite")]
 mod tests {
-    use super::SdkBuilder;
+    use super::{SdkBuilder, disable_breez_services_without_key};
     use crate::{Network, SdkError, default_config};
 
     fn signet_test_spark_config() -> crate::SparkConfig {
@@ -1267,6 +1283,30 @@ mod tests {
                 Err(SdkError::InvalidInput(message)) if message.contains("explicit chain service")
             ));
         }
+    }
+
+    #[test]
+    fn mainnet_without_api_key_drops_breez_hosted_services_only() {
+        let mut config = default_config(Network::Mainnet);
+        assert!(config.lnurl_domain.is_some() && config.real_time_sync_server_url.is_some());
+        disable_breez_services_without_key(&mut config);
+        assert!(config.lnurl_domain.is_none() && config.real_time_sync_server_url.is_none());
+
+        // with a key the services stay, and other networks are untouched
+        let mut keyed = default_config(Network::Mainnet);
+        keyed.api_key = Some("partner-key".to_string());
+        disable_breez_services_without_key(&mut keyed);
+        assert!(keyed.lnurl_domain.is_some() && keyed.real_time_sync_server_url.is_some());
+        // a server the caller chose itself is kept (only the exact Breez defaults are cleared)
+        let mut own = default_config(Network::Mainnet);
+        own.lnurl_domain = Some("pay.exemplo.com.br".to_string());
+        own.real_time_sync_server_url = Some("https://sync.exemplo.com.br".to_string());
+        disable_breez_services_without_key(&mut own);
+        assert_eq!(own.lnurl_domain.as_deref(), Some("pay.exemplo.com.br"));
+        assert_eq!(own.real_time_sync_server_url.as_deref(), Some("https://sync.exemplo.com.br"));
+        let mut regtest = default_config(Network::Regtest);
+        disable_breez_services_without_key(&mut regtest);
+        assert!(regtest.real_time_sync_server_url.is_some());
     }
 
     #[tokio::test]

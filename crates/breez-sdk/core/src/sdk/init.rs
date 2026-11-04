@@ -10,12 +10,12 @@ use super::{BreezSdk, BreezSdkParams, helpers::validate_breez_api_key};
 impl BreezSdk {
     /// Creates a new instance of the `BreezSdk`
     pub(crate) async fn init_and_start(params: BreezSdkParams) -> Result<Self, SdkError> {
-        // Test networks allow running custom deployments without a Breez API key.
-        if matches!(params.config.network, Network::Mainnet) {
-            match &params.config.api_key {
-                Some(api_key) => validate_breez_api_key(api_key)?,
-                None => return Err(SdkError::Generic("Missing Breez API key".to_string())),
-            }
+        // A key, when given, must be Breez's. Without one the builder has already switched the Breez-hosted
+        // services off (ibirapay: self-hosted mainnet deployment).
+        if matches!(params.config.network, Network::Mainnet)
+            && let Some(api_key) = &params.config.api_key
+        {
+            validate_breez_api_key(api_key)?;
         }
         let (initial_synced_sender, initial_synced_watcher) = watch::channel(false);
 
