@@ -1303,7 +1303,10 @@ mod tests {
         own.real_time_sync_server_url = Some("https://sync.exemplo.com.br".to_string());
         disable_breez_services_without_key(&mut own);
         assert_eq!(own.lnurl_domain.as_deref(), Some("pay.exemplo.com.br"));
-        assert_eq!(own.real_time_sync_server_url.as_deref(), Some("https://sync.exemplo.com.br"));
+        assert_eq!(
+            own.real_time_sync_server_url.as_deref(),
+            Some("https://sync.exemplo.com.br")
+        );
         let mut regtest = default_config(Network::Regtest);
         disable_breez_services_without_key(&mut regtest);
         assert!(regtest.real_time_sync_server_url.is_some());

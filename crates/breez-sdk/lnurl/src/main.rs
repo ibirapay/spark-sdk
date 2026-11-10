@@ -136,7 +136,7 @@ struct Args {
     pub domains: String,
 
     /// Fallback Breez API key used to attribute lightning-address receives for
-    /// any allowed domain that has no `api_key` of its own. Required on mainnet.
+    /// any allowed domain that has no `api_key` of its own. Optional: without one, a self-hosted mainnet server runs keyless and receives are unattributed.
     #[arg(long)]
     pub default_api_key: Option<String>,
 
@@ -301,20 +301,29 @@ fn parse_auth_seed(hex_str: Option<&str>) -> Result<[u8; 32], anyhow::Error> {
         .map_err(|_| anyhow!("ssp_auth_seed must be 32 bytes"))
 }
 
-fn resolve_default_api_key(
-    arg: Option<&str>,
-    is_mainnet: bool,
-) -> Result<Option<String>, anyhow::Error> {
-    let key = arg
-        .map(str::trim)
+/// ibirapay: mainnet without a Breez API key is a self-hosted deployment (own operators and SSP), so a missing key
+/// is not a startup error. Without a key no partner JWT is fetched and receives are unattributed. A key is still
+/// honoured when given, and (as before) dropped off mainnet where there is no JWT endpoint.
+fn resolve_default_api_key(arg: Option<&str>, is_mainnet: bool) -> Option<String> {
+    arg.map(str::trim)
         .filter(|k| !k.is_empty())
-        .map(str::to_string);
-    if is_mainnet && key.is_none() {
+        .map(str::to_string)
+        .filter(|_| is_mainnet)
+}
+
+/// Without `--spark-config` the server uses the network's default operators and SSP, which on mainnet are Lightspark's
+/// and need a partner key. A keyless mainnet server must therefore name its own deployment.
+fn keyless_needs_own_deployment(
+    is_mainnet: bool,
+    has_api_key: bool,
+    has_spark_config: bool,
+) -> Result<(), anyhow::Error> {
+    if is_mainnet && !has_api_key && !has_spark_config {
         return Err(anyhow!(
-            "a default API key is required on mainnet: set --default-api-key (or BREEZ_LNURL_DEFAULT_API_KEY)"
+            "mainnet without an API key needs --spark-config: the default deployment requires a key"
         ));
     }
-    Ok(key.filter(|_| is_mainnet))
+    Ok(())
 }
 
 #[allow(clippy::too_many_lines)]
@@ -371,8 +380,14 @@ where
     // mainnet-only, so regtest/testnet have no API keys or partner JWTs.
     let is_mainnet = matches!(args.network, Network::Mainnet);
     // Fallback key for domains without their own, so none are unattributed.
-    // Mandatory on mainnet (fails startup if missing), ignored otherwise.
-    let default_api_key = resolve_default_api_key(args.default_api_key.as_deref(), is_mainnet)?;
+    // Optional (ibirapay: keyless self-hosted mainnet), ignored off mainnet.
+    let default_api_key = resolve_default_api_key(args.default_api_key.as_deref(), is_mainnet);
+
+    keyless_needs_own_deployment(
+        is_mainnet,
+        default_api_key.is_some(),
+        args.spark_config.is_some(),
+    )?;
 
     let domains = domains::start(repository.clone(), is_mainnet, default_api_key.clone()).await?;
 
@@ -692,7 +707,10 @@ mod tests {
             "expected the body-limit error, got {err:?}"
         );
     }
-    use super::{Args, explicit_cli_overrides, parse_auth_seed, resolve_default_api_key};
+    use super::{
+        Args, explicit_cli_overrides, keyless_needs_own_deployment, parse_auth_seed,
+        resolve_default_api_key,
+    };
     use clap::{CommandFactory, FromArgMatches};
     use figment::{Figment, providers::Serialized};
 
@@ -769,22 +787,33 @@ mod tests {
     }
 
     #[test]
-    fn default_api_key_required_on_mainnet() {
-        // Present and trimmed on mainnet.
+    fn default_api_key_kept_and_trimmed_on_mainnet() {
         assert_eq!(
-            resolve_default_api_key(Some("  key  "), true).unwrap(),
+            resolve_default_api_key(Some("  key  "), true),
             Some("key".to_string())
         );
-        // Missing or blank is a startup error on mainnet.
-        assert!(resolve_default_api_key(None, true).is_err());
-        assert!(resolve_default_api_key(Some(""), true).is_err());
-        assert!(resolve_default_api_key(Some("   "), true).is_err());
+    }
+
+    #[test]
+    fn mainnet_without_a_default_api_key_starts_keyless() {
+        // ibirapay: self-hosted mainnet has no Breez key; missing or blank is no key, not an error.
+        assert_eq!(resolve_default_api_key(None, true), None);
+        assert_eq!(resolve_default_api_key(Some(""), true), None);
+        assert_eq!(resolve_default_api_key(Some("   "), true), None);
+    }
+
+    #[test]
+    fn keyless_mainnet_requires_its_own_spark_config() {
+        assert!(keyless_needs_own_deployment(true, false, false).is_err());
+        assert!(keyless_needs_own_deployment(true, false, true).is_ok());
+        assert!(keyless_needs_own_deployment(true, true, false).is_ok());
+        assert!(keyless_needs_own_deployment(false, false, false).is_ok());
     }
 
     #[test]
     fn default_api_key_ignored_off_mainnet() {
-        // No JWT endpoint off mainnet, so no key is required and any key is dropped.
-        assert_eq!(resolve_default_api_key(None, false).unwrap(), None);
-        assert_eq!(resolve_default_api_key(Some("key"), false).unwrap(), None);
+        // No JWT endpoint off mainnet, so any key is dropped.
+        assert_eq!(resolve_default_api_key(None, false), None);
+        assert_eq!(resolve_default_api_key(Some("key"), false), None);
     }
 }
