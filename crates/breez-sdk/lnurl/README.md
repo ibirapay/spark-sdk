@@ -113,7 +113,7 @@ max_sendable = 4000000000           # Maximum amount in millisatoshi (4,000,000 
 max_registrations_per_day = 5       # Address registrations per pubkey per domain
                                     # in a rolling 24h window (0 disables)
 domains = "yourdomain.com"          # Comma-separated list of allowed domains
-default_api_key = "<breez-api-key>" # Fallback Breez API key for partner attribution (required on mainnet)
+default_api_key = "<breez-api-key>" # Optional Breez API key for partner attribution
 ```
 
 ### Important Configuration Options
@@ -124,7 +124,7 @@ default_api_key = "<breez-api-key>" # Fallback Breez API key for partner attribu
 | `--auto-migrate` | Automatically apply database migrations | `false` |
 | `--db-url` | PostgreSQL connection string | `""` |
 | `--domains` | Comma-separated list of allowed domains | `localhost:8080` |
-| `--default-api-key` | Fallback Breez API key for partner attribution (**required on mainnet**) | (none) |
+| `--default-api-key` | Fallback Breez API key for partner attribution (optional) | (none) |
 | `--log-level` | RUST_LOG style format (e.g., `info`, `lnurl=trace,info`, `lnurl=trace,spark_wallet=debug,info`) | `info` |
 | `--network` | Spark network (mainnet, testnet, regtest) | `mainnet` |
 | `--spark-config` | JSON file with the Spark operators and SSP to use instead of the network's: what a deployment publishes, or a serialized wallet config | (none) |
@@ -151,7 +151,7 @@ This server creates invoices on behalf of its users, so each lightning-address r
 
 A receive is attributed to the domain's own Breez API key when one is configured for that domain, otherwise to the **default API key** (`--default-api-key` / `BREEZ_LNURL_DEFAULT_API_KEY`).
 
-On **mainnet the default API key is required**, and the server will not start without it. This ensures a self-hosted server attributes all of its receives (to its own partner) instead of leaving any unattributed.
+The default API key is optional. Without one, a mainnet server starts keyless: no partner JWT is fetched and receives of domains without their own key are unattributed.
 
 ### Database Support
 
